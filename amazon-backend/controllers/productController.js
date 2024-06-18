@@ -1,5 +1,5 @@
-const contract = require('../utils/web3setup');
-
+const contract = require('../utils/web3setup')
+const decodeRevertReason = require('../utils/errorDecoder');
 
 const getProductDetails = async (req, res) => {
     try {
@@ -9,9 +9,15 @@ const getProductDetails = async (req, res) => {
             success: true,
             product: product,
         });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: 'false', error: error.message });
+    }  catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(500).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+
+
     }
 }
 
@@ -23,10 +29,18 @@ const getOwnerHistory = async (req, res) => {
             success: true,
             history: history,
         });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: 'false', error: error.message });
     }
+    catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(500).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+
+
+    }
+
 }
 
 const verifyProduct = async (req, res) => {
@@ -37,10 +51,16 @@ const verifyProduct = async (req, res) => {
             success: true,
             verified: verified,
         });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: 'false', error: error.message });
+    } catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(500).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+
+
     }
 }
 
-module.exports = { getProductDetails, getOwnerHistory, verifyProduct}
+module.exports = { getProductDetails, getOwnerHistory, verifyProduct }

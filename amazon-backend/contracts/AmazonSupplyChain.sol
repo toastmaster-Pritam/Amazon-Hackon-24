@@ -137,19 +137,30 @@ contract AmazonSupplyChain {
         return uniqueHash;
     }
 
+    error productNotFound(string errorMessage);
+
     function requestOwnership(bytes32 _uniqueHash) public userRegistered {
         bytes32 productId = productHashes[_uniqueHash];
-        require(productId != 0, "Product not found");
+        if(productId==0){
+            revert productNotFound({
+                errorMessage:"Product Not found"
+            });
+        }
         require(products[productId].currentOwner != msg.sender, "Cannot request ownership from yourself");
 
         ownershipRequests[_uniqueHash] = OwnershipRequest(msg.sender, true);
 
         emit OwnershipRequested(productId, msg.sender, products[productId].currentOwner, _uniqueHash);
     }
+    
 
     function approveOwnership(bytes32 _uniqueHash) public {
         bytes32 productId = productHashes[_uniqueHash];
-        require(productId != 0, "Product not found");
+        if(productId==0){
+            revert productNotFound({
+                errorMessage:"Product Not found"
+            });
+        }
         require(products[productId].currentOwner == msg.sender, "Only the current owner can approve the transfer");
         require(ownershipRequests[_uniqueHash].isPending, "No pending ownership request");
 
@@ -174,7 +185,11 @@ contract AmazonSupplyChain {
 
     function verifyProduct(bytes32 _uniqueHash) public view returns (bool) {
         bytes32 productId = productHashes[_uniqueHash];
-        require(productId != 0, "Product not found");
+        if(productId==0){
+            revert productNotFound({
+                errorMessage:"Product Not found"
+            });
+        }
 
         address[] memory owners = productOwners[productId];
         bool flag = false;
@@ -193,13 +208,21 @@ contract AmazonSupplyChain {
 
     function getProductDetails(bytes32 _uniqueHash) public view returns (Product memory) {
         bytes32 _productId = productHashes[_uniqueHash];
-        require(_productId!=0,"Product does not exists!");
+        if(_productId ==0){
+            revert productNotFound({
+                errorMessage:"Product Not found"
+            });
+        }
         return products[_productId];
     }
 
     function getProductOwners(bytes32 _uniqueHash) public view returns (OwnerInfo[] memory) {
         bytes32 _productId = productHashes[_uniqueHash];
-         require(_productId!=0,"Product does not exists!");
+        if(_productId ==0){
+            revert productNotFound({
+                errorMessage:"Product Not found"
+            });
+        }
         address[] memory owners = productOwners[_productId];
 
         OwnerInfo[] memory ownersWithRoles = new OwnerInfo[](owners.length);

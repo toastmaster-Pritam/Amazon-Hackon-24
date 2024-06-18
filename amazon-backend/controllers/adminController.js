@@ -1,10 +1,11 @@
 const contract = require('../utils/web3setup');
+const decodeRevertReason = require('../utils/errorDecoder');
 
 const whiteListBrand = async (req, res) => {
     try {
 
         const {brandId}=req.body;
-        const tx = await contract.whiteListBrand(brandId);
+        const tx = await contract.whitelistBrand(brandId);
         await tx.wait();
 
         return res.status(200).json({
@@ -13,9 +14,14 @@ const whiteListBrand = async (req, res) => {
         });
         
 
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: 'false', error: error.message });
+    }  catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(500).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+
 
     }
 }
@@ -33,9 +39,14 @@ const removeBrandFromWhiteList = async (req, res) => {
         });
         
 
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: 'false', error: error.message });
+    }  catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(500).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+
 
     }
 }
@@ -48,9 +59,15 @@ const getIPFSHash =async (req,res)=>{
             success: true,
             url: hash,
         });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ success: 'false', error: error.message });
+    }  catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(500).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+
+
     }
 }
 
