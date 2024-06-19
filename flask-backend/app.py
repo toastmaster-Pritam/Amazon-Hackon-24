@@ -22,6 +22,13 @@ def predict_review():
     prediction = review_classifier.hybrid_classify(review_text)  # Use hybrid_classify or other method as needed
     return jsonify({'prediction': prediction})
 
+@app.route('/rate-product', methods=['POST'])
+def predict_review():
+    data = request.get_json()
+    reviews = data['reviews']
+    fake, total = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
+    return jsonify({'fake': fake, 'total': total})
+
 # @app.route('/predict-logo', methods=['POST'])
 # def predict_logo():
 #     data = request.get_json()

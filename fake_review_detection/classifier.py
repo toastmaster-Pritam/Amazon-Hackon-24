@@ -1,12 +1,11 @@
+import numpy as np
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
-from transformers import dependency_versions_check
 from torch import cuda
 
 class Classifier:
     def __init__(self, model_name='distilbert', return_bool=False):
         
         self.model_path={'distilbert':'theArijitDas/distilbert-finetuned-fake-reviews',}
-                        #  'longformer':'theArijitDas/longformer-finetuned-fake-reviews',}
         
         self.label2bool = {'REAL':False, 'FAKE':True}
         
@@ -77,3 +76,10 @@ class Classifier:
 
         if return_bool: return self.label2bool[label]
         return label
+    
+    def rate_product(self, reviews, return_frac=False):
+        pred_with_model = np.array(list(map(lambda x: classifier.classify_with_model(x, return_bool=True), reviews)))
+        pred_by_keyword = np.array(list(map(lambda x: classifier.classify_by_keyword(x, return_bool=True), reviews)))
+        pred = pred_with_model&pred_by_keyword
+        if return_frac: return round(sum(pred)/len(pred), 4)
+        return sum(pred), len(pred)
