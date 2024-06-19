@@ -90,21 +90,29 @@ export const Web3Provider = ({ children }) => {
 
       if (response.status === 200) {
         const brandLogoUrl = response.data.url;
-        //   const {contract,provider} = getContract();
+          const {contract,provider} = getContract();
 
-        //   const tx = await contract.registerBrand(brandName, brandLogoUrl);
+          const tx = await contract.registerBrand(brandName, brandLogoUrl);
 
-        //    await tx.wait();
+           await tx.wait();
 
-        //    const receipt = await provider.getTransactionReceipt(tx.hash);
+           const receipt = await provider.getTransactionReceipt(tx.hash);
 
-        //    const brandRegisteredEvent = contract.interface.parseLog(
-        //     receipt.logs[0]
-        // );
-        // const brandId = brandRegisteredEvent.args.brandId;
+           console.log(receipt);
 
+           const brandRegisteredEvent = contract.interface.parseLog(
+            receipt.logs[0]
+        );
+        const brandId = brandRegisteredEvent.args.brandId;
+        const brand_name=brandRegisteredEvent.args.name;
+        
         console.log("Logo uploaded successfully!");
-        console.log("BrandLogo : ", brandLogoUrl.toString());
+        console.log("BrandId: ",brandId.toString());
+        console.log("Brand Name: ",brand_name);
+
+
+        console.log(brandRegisteredEvent)
+        
       } else {
         console.log("error uploading brand logo!");
       }
