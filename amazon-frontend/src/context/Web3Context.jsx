@@ -3,6 +3,7 @@ import { useContext, createContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import abi from "../utils/AmazonSupplyChain.json";
 import axios from "axios";
+import { parseRevertReason } from "@/utils/errorDecoder";
 
 const Web3Context = createContext();
 const contractABI = abi.abi;
@@ -71,7 +72,7 @@ export const Web3Provider = ({ children }) => {
 
   const registerBrand = async (brandName, brandLogoFile) => {
     try {
-      if (!ethereum) return alert("Make sure you have metamask installed");
+      if (!ethereum) return alert("Make sure you have MetaMask installed");
       console.log(brandLogoFile);
 
       const formData = new FormData();
@@ -89,67 +90,75 @@ export const Web3Provider = ({ children }) => {
       console.log(response);
 
       if (response.status === 200) {
-        const brandLogoUrl = response.data.url;
-          const {contract,provider} = getContract();
+        const brandLogoUrl = response?.data?.url;
 
-          const tx = await contract.registerBrand(brandName, brandLogoUrl);
+        const { contract, provider } = getContract();
 
-           await tx.wait();
+        try {
+          await contract.callStatic.registerBrand(brandName, brandLogoUrl);
+        } catch (staticCallError) {
+          //console.log(staticCallError.error.data.data);
+          const revertReason = parseRevertReason(
+            staticCallError.error.data.data
+          );
+          console.error(`Revert reason: ${revertReason}`);
+          alert(revertReason);
 
-           const receipt = await provider.getTransactionReceipt(tx.hash);
+          return;
+        }
 
-           console.log(receipt);
+        const tx = await contract.registerBrand(brandName, brandLogoUrl);
+        await tx.wait();
 
-           const brandRegisteredEvent = contract.interface.parseLog(
-            receipt.logs[0]
+        const receipt = await provider.getTransactionReceipt(tx.hash);
+        console.log(receipt);
+
+        const brandRegisteredEvent = contract.interface.parseLog(
+          receipt.logs[0]
         );
         const brandId = brandRegisteredEvent.args.brandId;
-        const brand_name=brandRegisteredEvent.args.name;
-        
+        const brand_name = brandRegisteredEvent.args.name;
+
         console.log("Logo uploaded successfully!");
-        console.log("BrandId: ",brandId.toString());
-        console.log("Brand Name: ",brand_name);
+        console.log("BrandId: ", brandId.toString());
+        console.log("Brand Name: ", brand_name);
 
-
-        console.log(brandRegisteredEvent)
-        
+        console.log(brandRegisteredEvent);
       } else {
-        console.log("error uploading brand logo!");
+        console.log("Error uploading brand logo!");
       }
     } catch (error) {
-      console.log("error registering brand!", error);
+      console.log("Error registering brand!", error);
+      console.error(error);
     }
   };
 
-  {
-    /* 
-  const registerProduct = async (
-    productname,
-    productDetails,
-    productPrice,
-    brandId
-  ) => {
+  const registerProduct = async (productname, productDetails, brandId) => {
     try {
       if (!ethereum) return alert("Make sure you have metamask installed");
-      const {contract} = getContract();
+      const { contract } = getContract();
       const tx = await contract.registerProduct(
         productname,
         productDetails,
-        productPrice,
         brandId
       );
-      const receipt = await tx.wait();
-      
+      await tx.wait();
+
+      const receipt = await provider.getTransactionReceipt(tx.hash);
+
+      const productRegisteredEvent = contract.interface.parseLog(
+        receipt.logs[0]
+      );
+      const productId = productRegisteredEvent.args.productId;
+      const product_name = productRegisteredEvent.args.name;
 
       console.log("Product registered successfully!");
-       console.log(receipt)
-      
+      console.log("ProductId: ", productId.toString());
+      console.log("Product Name: ", product_name);
     } catch (error) {
       console.log(error);
     }
   };
-  */
-  }
 
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -162,6 +171,7 @@ export const Web3Provider = ({ children }) => {
         account,
         registerUser,
         registerBrand,
+        registerProduct,
       }}
     >
       {children}
