@@ -1,5 +1,6 @@
 const contract = require("../utils/web3setup");
 const cloudinary = require("../utils/cloudinary");
+const decodeRevertReason = require('../utils/errorDecoder');
 
 const isBrandStored = async (req, res) => {
   try {
@@ -15,6 +16,24 @@ const isBrandStored = async (req, res) => {
   }
 };
 
+const getAllManufacturerBrands = async (req, res) => {
+  try {
+    const { address } = req.params;
+    const products = await contract.getAllManufacturerBrands(address);
+    return res.status(200).json({
+      success: true,
+      products: products,
+    });
+  } catch (e) {
+    if (e.code === 'CALL_EXCEPTION') {
+      const reason = await decodeRevertReason(e.info.error.data);
+      res.status(404).json({ success: 'false', error: reason });
+    }
+
+    console.log(e.info);
+  }
+}
+
 const uploadBrandLogo = (req, res) => {
   console.log(req.file);
   cloudinary.uploader.upload(req.file.path, async (err, result) => {
@@ -29,4 +48,4 @@ const uploadBrandLogo = (req, res) => {
   });
 };
 
-module.exports = { isBrandStored, uploadBrandLogo };
+module.exports = { isBrandStored, uploadBrandLogo, getAllManufacturerBrands };
