@@ -21,10 +21,11 @@ export default function Home() {
         <Link href="#" className="text-xl font-bold" prefetch={false}>
           Amazon
         </Link>
+        <Link href='/register'>
         <Button className="inline-flex items-center gap-2">
           Register
           <ChevronRightIcon className="h-4 w-4" />
-        </Button>
+        </Button></Link>
       </header>
       <section className="relative w-full bg-gradient-to-br from-[#0077b6] to-[#00b894] py-24 md:py-32 lg:py-40">
         <div className="container px-4 md:px-6">

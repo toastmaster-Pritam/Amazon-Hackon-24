@@ -20,7 +20,7 @@ const getContract = () => {
   return {
     contract,
     provider,
-  }
+  };
 };
 
 export const Web3Provider = ({ children }) => {
@@ -60,46 +60,49 @@ export const Web3Provider = ({ children }) => {
       if (!ethereum) return alert("Make sure you have metamask installed");
       const { contract } = getContract();
       const tx = await contract.registerUser(role, name, email, phoneNumber);
-     const receipt= await tx.wait();
+      const receipt = await tx.wait();
 
       console.log("User registered successfully!");
-      console.log(receipt)
+      console.log(receipt);
     } catch (error) {
       console.log(error);
     }
   };
 
-
   const registerBrand = async (brandName, brandLogoFile) => {
     try {
       if (!ethereum) return alert("Make sure you have metamask installed");
+      console.log(brandLogoFile);
+
+      const formData = new FormData();
+      formData.append("brandLogo", brandLogoFile);
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/upload`,
-        brandLogoFile,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/uploadBrandLogo`,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         }
       );
+      console.log(response);
 
       if (response.status === 200) {
-        const brandLogoUrl = response.data.data.brandLogo;
-      //   const {contract,provider} = getContract();
+        const brandLogoUrl = response.data.url;
+        //   const {contract,provider} = getContract();
 
-      //   const tx = await contract.registerBrand(brandName, brandLogoUrl);
+        //   const tx = await contract.registerBrand(brandName, brandLogoUrl);
 
-      //    await tx.wait();
+        //    await tx.wait();
 
-      //    const receipt = await provider.getTransactionReceipt(tx.hash);
+        //    const receipt = await provider.getTransactionReceipt(tx.hash);
 
-      //    const brandRegisteredEvent = contract.interface.parseLog(
-      //     receipt.logs[0]
-      // );
-      // const brandId = brandRegisteredEvent.args.brandId;
+        //    const brandRegisteredEvent = contract.interface.parseLog(
+        //     receipt.logs[0]
+        // );
+        // const brandId = brandRegisteredEvent.args.brandId;
 
-       
         console.log("Logo uploaded successfully!");
         console.log("BrandLogo : ", brandLogoUrl.toString());
       } else {
@@ -110,8 +113,8 @@ export const Web3Provider = ({ children }) => {
     }
   };
 
-
-  {/* 
+  {
+    /* 
   const registerProduct = async (
     productname,
     productDetails,
@@ -137,9 +140,8 @@ export const Web3Provider = ({ children }) => {
       console.log(error);
     }
   };
-  */}
-
-  
+  */
+  }
 
   useEffect(() => {
     checkIfWalletIsConnected();

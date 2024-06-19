@@ -1,8 +1,4 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/Q8eV4gn9LI4
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+
 "use client"
 
 import { useState } from "react"
@@ -26,12 +22,10 @@ export default function Component() {
     }))
   }
   const handleRegisterBrand = () => {
-
     registerBrand(brandData.name, brandData.image)
-   
-    
     console.log("Registering brand:", brandData)
   }
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-md">
