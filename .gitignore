@@ -1,2 +1,3 @@
 amazon-hackathon-24-venv/
 fake_review_detection/__pycache__/
+.venv/
