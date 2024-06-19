@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client"
 
 import { useState } from "react"
@@ -125,7 +124,7 @@ export default function Component() {
     </div>
   )
 }
-=======
+
 "use client";
 
 import { useState } from "react";
@@ -262,4 +261,4 @@ export default function Component() {
     </div>
   );
 }
->>>>>>> c0f9e99c311997b9a691112b6fb75c964e924b24
+
