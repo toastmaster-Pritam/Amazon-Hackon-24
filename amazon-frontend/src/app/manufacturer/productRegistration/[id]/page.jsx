@@ -18,26 +18,18 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useWeb3 } from "@/context/Web3Context";
+import { shortenAddress } from "@/utils/shortenAddress";
 
-export default function Component() {
-  const router = useRouter();
-  const [brandId, setBrandId] = useState("");
-
-  useEffect(() => {
-    if (router.isReady) {
-      const { id } = router.query;
-      setBrandId(id);
-    }
-  }, [router.isReady, router.query]);
+export default function Component({ params }) {
+  const {registerProduct}=useWeb3();
   const [data, setData] = useState({
     name: "",
-    brand: brandId,
+    brand: shortenAddress(params.id),
     image: null,
     description: "",
   });
-  console.log(data);
+  //console.log(data);
   const handleChange = (field, value) => {
     setData((prevData) => ({
       ...prevData,
@@ -47,6 +39,7 @@ export default function Component() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting form with data:", data);
+    registerProduct(data.name,data.image, data.description, data.brand);
   };
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
