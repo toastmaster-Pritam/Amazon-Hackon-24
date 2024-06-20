@@ -1,6 +1,7 @@
 import { getContract } from "@/utils/web3setup";
 import { parseRevertReason } from "@/utils/errorDecoder";
 const { ethereum } = window;
+import toast from "react-hot-toast";
 import axios from "axios";
 
 export const registerProduct = async (
@@ -10,7 +11,11 @@ export const registerProduct = async (
     brandId
   ) => {
     try {
-      if (!ethereum) return alert("Make sure you have metamask installed");
+      if (!ethereum){
+        toast.error("Make sure you have metamask installed");
+        return;
+
+      } 
       const { contract, provider } = getContract();
 
       try {
@@ -23,7 +28,7 @@ export const registerProduct = async (
         //console.log(staticCallError.error.data.data);
         const revertReason = parseRevertReason(staticCallError.error.data.data);
         console.error(`Revert reason: ${revertReason}`);
-        alert(revertReason);
+        toast.error(revertReason);
 
         return;
       }

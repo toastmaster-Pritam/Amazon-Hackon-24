@@ -1,10 +1,15 @@
 import { getContract } from "@/utils/web3setup";
 import { parseRevertReason } from "@/utils/errorDecoder";
+import toast from "react-hot-toast";
 const { ethereum } = window;
 
 export const approveOwnership = async (_uniqueHash) => {
     try {
-      if (!ethereum) return alert("Make sure you have metamask installed");
+      if (!ethereum){
+        toast.error("Make sure you have metamask installed");
+        return;
+
+      } 
       const { contract, provider } = getContract();
 
       try {
@@ -13,7 +18,7 @@ export const approveOwnership = async (_uniqueHash) => {
         //console.log(staticCallError.error.data.data);
         const revertReason = parseRevertReason(staticCallError.error.data.data);
         console.error(`Revert reason: ${revertReason}`);
-        alert(revertReason);
+        toast.error(revertReason);
 
         return;
       }

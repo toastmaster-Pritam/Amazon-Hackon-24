@@ -207,9 +207,17 @@ contract AmazonSupplyChain {
 
     function whitelistBrand(bytes32 _brandId) public onlyAdmin {
         address _manufacturerAdress = brands[_brandId].manufacturer;
+        require(brands[_brandId].isWhitelisted==false,"Brand Already Whitelisted!");
         require(_manufacturerAdress != address(0), "Brand does not exist");
         brands[_brandId].isWhitelisted = true;
         Brand[] storage mybrands = manufacturerBrands[_manufacturerAdress];
+
+        for(uint256 i=0;i<allbrands.length;i++){
+            if(allbrands[i].id==_brandId){
+                allbrands[i].isWhitelisted=true;
+                break;
+            }
+        }
         for (uint256 i = 0; i < mybrands.length; i++) {
             if (mybrands[i].id == _brandId) {
                 mybrands[i].isWhitelisted = true;
@@ -226,6 +234,13 @@ contract AmazonSupplyChain {
         require(brands[_brandId].isWhitelisted, "Brand is not whitelisted");
         brands[_brandId].isWhitelisted = false;
         Brand[] storage mybrands = manufacturerBrands[_manufacturerAdress];
+
+        for(uint256 i=0;i<allbrands.length;i++){
+            if(allbrands[i].id==_brandId){
+                allbrands[i].isWhitelisted=false;
+                break;
+            }
+        }
         for (uint256 i = 0; i < mybrands.length; i++) {
             if (mybrands[i].id == _brandId) {
                 mybrands[i].isWhitelisted = false;

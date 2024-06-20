@@ -3,6 +3,7 @@ import "./globals.css";
 import { Comfortaa } from "next/font/google";
 import { Gabarito } from "next/font/google";
 import { Web3Provider } from "@/context/Web3Context";
+import { Toaster } from "react-hot-toast";
 import "./styles.css";
 
 const comfortaa = Comfortaa({
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
         }
       >
         <Web3Provider>
+          <Toaster />
         {children}
         </Web3Provider>
       </body>
