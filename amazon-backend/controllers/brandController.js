@@ -19,10 +19,10 @@ const isBrandStored = async (req, res) => {
 const getAllManufacturerBrands = async (req, res) => {
   try {
     const { address } = req.params;
-    const products = await contract.getAllManufacturerBrands(address);
+    const brands = await contract.getAllManufacturerBrands(address);
     return res.status(200).json({
       success: true,
-      products: products,
+      brands,
     });
   } catch (e) {
     if (e.code === 'CALL_EXCEPTION') {

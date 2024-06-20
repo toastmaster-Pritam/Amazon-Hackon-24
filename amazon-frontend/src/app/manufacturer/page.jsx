@@ -1,13 +1,11 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/2IHRPK17Q0x
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useWeb3 } from "@/context/Web3Context";
+
 import {
   Table,
   TableHeader,
@@ -19,12 +17,42 @@ import {
 
 export default function Component() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [brands, setBrands] = useState([]);
+  const { account } = useWeb3();
+
+  const getBrands = async () => {
+    if (!account) {
+      console.log("Account is not available");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/all/${account}`);
+      console.log("Response data:", response.data);
+
+      if (response.data.success && Array.isArray(response.data.brands) && response.data.brands.length > 0) {
+        // Parse the response data
+        const parsedBrands = response.data.brands[0].map(brandArray => ({
+          id: brandArray[0],
+          name: brandArray[1],
+          logoUrl: brandArray[2] || "/placeholder.svg",
+        }));
+
+        setBrands(parsedBrands);
+      }
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    }
+  };
+
+  useEffect(() => {
+    getBrands();
+  }, [account]);
+
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[220px_1fr]">
       <div
-        className={`border-r bg-muted/40 lg:block ${
-          isSidebarOpen ? "block" : "hidden"
-        }`}
+        className={`border-r bg-muted/40 lg:block ${isSidebarOpen ? "block" : "hidden"}`}
       >
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-[60px] items-center border-b px-6">
@@ -101,52 +129,30 @@ export default function Component() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <img
-                        src="/placeholder.svg"
-                        width="64"
-                        height="64"
-                        alt="Brand logo"
-                        className="aspect-square rounded-md object-contain"
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">Acme Inc</TableCell>
-                    <TableCell>0x123456789abcdef</TableCell>
-                    <TableCell>
-                      <Link
-                        href="#"
-                        className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                        prefetch={false}
-                      >
-                        Register Product
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <img
-                        src="/placeholder.svg"
-                        width="64"
-                        height="64"
-                        alt="Brand logo"
-                        className="aspect-square rounded-md object-contain"
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      Wayne Enterprises
-                    </TableCell>
-                    <TableCell>0xabcdef0123456789</TableCell>
-                    <TableCell>
-                      <Link
-                        href="/manufacturer/productRegistration/0xabcdef0123456789"
-                        className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                        prefetch={false}
-                      >
-                        Register Product
-                      </Link>
-                    </TableCell>
-                  </TableRow>
+                  {brands.forEach((brand) => (
+                    <TableRow key={brand.id}>
+                      <TableCell>
+                        <img
+                          src={brand.logoUrl}
+                          width="64"
+                          height="64"
+                          alt="Brand logo"
+                          className="aspect-square rounded-md object-contain"
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{brand.name}</TableCell>
+                      <TableCell>{brand.id}</TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/manufacturer/productRegistration/${brand.id}`}
+                          className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                          prefetch={false}
+                        >
+                          Register Product
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </div>
@@ -196,26 +202,6 @@ function HomeIcon(props) {
   );
 }
 
-function LineChartIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 3v18h18" />
-      <path d="m19 9-5 5-4-4-3 3" />
-    </svg>
-  );
-}
-
 function MenuIcon(props) {
   return (
     <svg
@@ -258,28 +244,6 @@ function Package2Icon(props) {
   );
 }
 
-function PackageIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m7.5 4.27 9 5.15" />
-      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="M12 22V12" />
-    </svg>
-  );
-}
-
 function PlusIcon(props) {
   return (
     <svg
@@ -296,28 +260,6 @@ function PlusIcon(props) {
     >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
-    </svg>
-  );
-}
-
-function UsersIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
 }
