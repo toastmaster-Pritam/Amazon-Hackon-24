@@ -34,6 +34,24 @@ const getAllManufacturerBrands = async (req, res) => {
   }
 }
 
+const getAllBrands = async (req, res) => {
+  try {
+    
+    const brands = await contract.getAllBrands();
+    return res.status(200).json({
+      success: true,
+      brands,
+    });
+  } catch (e) {
+    if (e.code === 'CALL_EXCEPTION') {
+      const reason = await decodeRevertReason(e.info.error.data);
+      res.status(404).json({ success: 'false', error: reason });
+    }
+
+    console.log(e.info);
+  }
+}
+
 const uploadBrandLogo = (req, res) => {
   console.log(req.file);
   cloudinary.uploader.upload(req.file.path, async (err, result) => {
@@ -48,4 +66,4 @@ const uploadBrandLogo = (req, res) => {
   });
 };
 
-module.exports = { isBrandStored, uploadBrandLogo, getAllManufacturerBrands };
+module.exports = { isBrandStored, uploadBrandLogo, getAllManufacturerBrands, getAllBrands};
