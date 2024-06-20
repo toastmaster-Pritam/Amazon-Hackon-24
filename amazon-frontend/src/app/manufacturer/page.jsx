@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useWeb3 } from "@/context/Web3Context";
+import { shortenAddress } from "@/utils/shortenAddress";
 
 import {
   Table,
@@ -27,10 +28,12 @@ export default function Component() {
     }
 
     try {
-      const res = await axios.get(
+      const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/all/${account}`
       );
-      console.log("Response data:", res.data);
+      //console.log("Response data:", response.data);
+
+      setBrands(response.data.brands);
     } catch (error) {
       console.error("Error fetching brands:", error);
     }
@@ -122,24 +125,22 @@ export default function Component() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {brands.forEach((brand) => (
-                    <TableRow key={brand.id}>
+                  {brands.length > 0 && brands.map((brand, index) => (
+                    <TableRow key={brand[0]}>
                       <TableCell>
                         <img
-                          src={brand.logoUrl}
+                          src={brand[4] || "/placeholder.svg"}
                           width="64"
                           height="64"
                           alt="Brand logo"
                           className="aspect-square rounded-md object-contain"
                         />
                       </TableCell>
-                      <TableCell className="font-medium">
-                        {brand.name}
-                      </TableCell>
-                      <TableCell>{brand.id}</TableCell>
+                      <TableCell className="font-medium">{brand[1]}</TableCell>
+                      <TableCell>{shortenAddress(brand[0])}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/manufacturer/productRegistration/${brand.id}`}
+                          href={`/manufacturer/productRegistration/${brand[0]}`}
                           className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                           prefetch={false}
                         >
