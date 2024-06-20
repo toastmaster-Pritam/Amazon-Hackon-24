@@ -1,5 +1,6 @@
 import { getContract } from "@/utils/web3setup";
 import { parseRevertReason } from "@/utils/errorDecoder";
+import { ethers } from "ethers";
 const { ethereum } = window;
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -16,6 +17,9 @@ export const registerProduct = async (
         return;
 
       } 
+      
+
+
       const { contract, provider } = getContract();
 
       try {
@@ -25,7 +29,7 @@ export const registerProduct = async (
           brandId
         );
       } catch (staticCallError) {
-        //console.log(staticCallError.error.data.data);
+        //console.log(staticCallError);
         const revertReason = parseRevertReason(staticCallError.error.data.data);
         console.error(`Revert reason: ${revertReason}`);
         toast.error(revertReason);
@@ -69,6 +73,7 @@ export const registerProduct = async (
 
       const productImageUrl = response?.data?.url;
       console.log("Product Image url:", productImageUrl);
+      toast.success("Product registered successfully!");
     } catch (error) {
       console.log(error);
     }

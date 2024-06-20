@@ -20,12 +20,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useWeb3 } from "@/context/Web3Context";
 import { shortenAddress } from "@/utils/shortenAddress";
+import toast from "react-hot-toast";
 
 export default function Component({ params }) {
-  const {registerProduct}=useWeb3();
+  const {registerProduct,account}=useWeb3();
   const [data, setData] = useState({
     name: "",
-    brand: shortenAddress(params.id),
+    brand: params.id,
     image: null,
     description: "",
   });
@@ -38,6 +39,16 @@ export default function Component({ params }) {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(!account){
+      toast.error("Connect your wallet first!");
+      setData({
+        name: "",
+        brand: params.id,
+        image: null,
+        description: "",
+      });
+      return;
+    }
     console.log("Submitting form with data:", data);
     registerProduct(data.name,data.image, data.description, data.brand);
   };
@@ -67,8 +78,9 @@ export default function Component({ params }) {
                 <Input
                   id="brand"
                   placeholder="Enter brand ID"
-                  value={data.brand}
+                  value={shortenAddress(data.brand)}
                   onChange={(e) => handleChange("brand", e.target.value)}
+                  disabled={true}
                 />
               </div>
             </div>

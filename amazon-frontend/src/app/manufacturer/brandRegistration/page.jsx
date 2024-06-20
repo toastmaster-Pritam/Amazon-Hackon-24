@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useWeb3 } from "@/context/Web3Context";
+import toast from "react-hot-toast";
 import Link from "next/link";
 
 export default function Component() {
@@ -19,7 +20,7 @@ export default function Component() {
     image: null,
     name: "",
   });
-  const { registerBrand } = useWeb3();
+  const { registerBrand ,account} = useWeb3();
   const handleBrandChange = (event) => {
     const { name, files } = event.target;
     setBrandData((prevData) => ({
@@ -28,6 +29,14 @@ export default function Component() {
     }));
   };
   const handleRegisterBrand = () => {
+    if(!account){
+      toast.error("Connect your wallet first!");
+      setBrandData({
+        image: null,
+        name: "",
+      });
+      return;
+    }
     registerBrand(brandData.name, brandData.image);
     console.log("Registering brand:", brandData);
   };
