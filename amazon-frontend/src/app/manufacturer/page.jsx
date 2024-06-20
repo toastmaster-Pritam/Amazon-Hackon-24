@@ -27,19 +27,10 @@ export default function Component() {
     }
 
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/all/${account}`);
-      console.log("Response data:", response.data);
-
-      if (response.data.success && Array.isArray(response.data.brands) && response.data.brands.length > 0) {
-        // Parse the response data
-        const parsedBrands = response.data.brands[0].map(brandArray => ({
-          id: brandArray[0],
-          name: brandArray[1],
-          logoUrl: brandArray[2] || "/placeholder.svg",
-        }));
-
-        setBrands(parsedBrands);
-      }
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/all/${account}`
+      );
+      console.log("Response data:", res.data);
     } catch (error) {
       console.error("Error fetching brands:", error);
     }
@@ -52,7 +43,9 @@ export default function Component() {
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[220px_1fr]">
       <div
-        className={`border-r bg-muted/40 lg:block ${isSidebarOpen ? "block" : "hidden"}`}
+        className={`border-r bg-muted/40 lg:block ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
       >
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-[60px] items-center border-b px-6">
@@ -140,7 +133,9 @@ export default function Component() {
                           className="aspect-square rounded-md object-contain"
                         />
                       </TableCell>
-                      <TableCell className="font-medium">{brand.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {brand.name}
+                      </TableCell>
                       <TableCell>{brand.id}</TableCell>
                       <TableCell>
                         <Link

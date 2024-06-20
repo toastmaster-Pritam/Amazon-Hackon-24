@@ -1,6 +1,6 @@
 /**
  * v0 by Vercel.
- * @see https://v0.dev/t/G8pHEppWTUB
+ * @see https://v0.dev/t/POcuX7mu22j
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 "use client"
@@ -32,13 +32,13 @@ export default function Component() {
     setReview("")
   }
   return (
-    <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16 bg-gray-100">
+    <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16 bg-[#f1f1f1]">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Leave a Review</h1>
         <form className="bg-background rounded-lg shadow-md p-6 space-y-4 bg-white" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-foreground">
+              <label htmlFor="username" className="block text-sm font-medium text-foreground py-1">
                 Username
               </label>
               <input
@@ -46,12 +46,12 @@ export default function Component() {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full rounded-md border-input bg-background px-3 py-2 text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="block w-full rounded-md border border-input bg-background px-3 py-2 text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 placeholder="Enter your username"
               />
             </div>
             <div>
-              <label htmlFor="rating" className="block text-sm font-medium text-foreground">
+              <label htmlFor="rating" className="block text-sm font-medium text-foreground py-1">
                 Rating
               </label>
               <div className="flex items-center">
@@ -66,7 +66,7 @@ export default function Component() {
             </div>
           </div>
           <div>
-            <label htmlFor="review" className="block text-sm font-medium text-foreground">
+            <label htmlFor="review" className="block text-sm font-medium text-foreground py-1">
               Review
             </label>
             <textarea
@@ -74,7 +74,7 @@ export default function Component() {
               rows={4}
               value={review}
               onChange={(e) => setReview(e.target.value)}
-              className="block w-full rounded-md border-input bg-background px-3 py-2 text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="block w-full rounded-md border border-input bg-background px-3 py-2 text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder="Write your review"
             />
           </div>
@@ -86,7 +86,7 @@ export default function Component() {
           <h2 className="text-2xl font-bold mb-4">Reviews</h2>
           <div className="space-y-4">
             {reviews.map((review, index) => (
-              <div key={index} className="bg-background rounded-lg shadow-md p-4">
+              <div key={index} className="bg-background rounded-lg shadow-md p-4 bg-white">
                 <div className="flex items-center justify-between mb-2">
                   <div className="font-medium">{review.username}</div>
                   <div className="flex items-center">
