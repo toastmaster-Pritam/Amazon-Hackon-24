@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useState, useEffect, React } from "react";
+import { useState, React } from "react";
 import {
   Card,
   CardHeader,

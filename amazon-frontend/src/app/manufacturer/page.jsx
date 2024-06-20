@@ -22,6 +22,7 @@ export default function Component() {
   const { account } = useWeb3();
 
   const getBrands = async () => {
+    console.log(account)
     if (!account) {
       console.log("Account is not available");
       return;

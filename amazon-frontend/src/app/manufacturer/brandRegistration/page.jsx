@@ -38,7 +38,7 @@ export default function Component() {
         <Link href="/manufacturer">
           <Button className="text-gray-700 bg-gray-100">
             <svg
-              class="w-6 h-6 text-gray-800"
+              className="w-6 h-6 text-gray-800"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -48,9 +48,9 @@ export default function Component() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M5 12h14M5 12l4-4m-4 4 4 4"
               />
             </svg>
