@@ -27,6 +27,7 @@ export default function Component() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(account)
     if(!account){
       toast.error("Connect your wallet first!");
       setData({

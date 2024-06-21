@@ -1,9 +1,13 @@
-const express=require('express');
+const express = require("express");
 
 const router = express.Router();
 
-const {getIPFSHash}=require('../controllers/adminController')
+const {
+  getIPFSHash,
+  ownerShipTransferEmail,
+} = require("../controllers/adminController");
 
-router.get('/getIPFSHash',getIPFSHash);
+router.get("/getIPFSHash", getIPFSHash);
+router.post("/ownerShipTransferEmail", ownerShipTransferEmail);
 
-module.exports=router;
+module.exports = router;

@@ -28,6 +28,8 @@ export const requestOwnership = async (_uniqueHash) => {
       const receipt = await provider.getTransactionReceipt(tx.hash);
       console.log(receipt)
 
+      toast.success("Ownership request sent successfully!");
+
       const requestOwnershipEvent = contract.interface.parseLog(
         receipt.logs[0]
       );

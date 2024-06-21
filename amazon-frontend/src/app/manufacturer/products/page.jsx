@@ -35,7 +35,8 @@ export default function Component() {
 
   const downloadQrCode = async (uniqueHash,productId) => {
     const qrElement = qrRef.current[uniqueHash];
-    console.log(qrElement)
+    console.log(uniqueHash)
+    //console.log(qrElement)
     if (qrElement) {
       const canvas = await html2canvas(qrElement);
       const dataUrl = canvas.toDataURL("image/png");

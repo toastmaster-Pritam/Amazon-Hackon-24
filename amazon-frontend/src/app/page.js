@@ -21,7 +21,7 @@ export default function Home() {
         <Link href="#" className="text-xl font-bold" prefetch={false}>
           Amazon
         </Link>
-        <Link href='/register'>
+        <Link href='/user/register'>
         <Button className="inline-flex items-center gap-2">
           Register
           <ChevronRightIcon className="h-4 w-4" />

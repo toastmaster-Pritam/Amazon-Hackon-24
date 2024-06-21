@@ -1,6 +1,6 @@
 const contract = require("../utils/web3setup");
 const cloudinary = require("../utils/cloudinary");
-const decodeRevertReason = require('../utils/errorDecoder');
+const decodeRevertReason = require("../utils/errorDecoder");
 
 const isBrandStored = async (req, res) => {
   try {
@@ -25,32 +25,31 @@ const getAllManufacturerBrands = async (req, res) => {
       brands,
     });
   } catch (e) {
-    if (e.code === 'CALL_EXCEPTION') {
+    if (e.code === "CALL_EXCEPTION") {
       const reason = await decodeRevertReason(e.info.error.data);
-      res.status(404).json({ success: 'false', error: reason });
+      res.status(404).json({ success: "false", error: reason });
     }
 
     console.log(e.info);
   }
-}
+};
 
 const getAllBrands = async (req, res) => {
   try {
-    
     const brands = await contract.getAllBrands();
     return res.status(200).json({
       success: true,
       brands,
     });
   } catch (e) {
-    if (e.code === 'CALL_EXCEPTION') {
+    if (e.code === "CALL_EXCEPTION") {
       const reason = await decodeRevertReason(e.info.error.data);
-      res.status(404).json({ success: 'false', error: reason });
+      res.status(404).json({ success: "false", error: reason });
     }
 
     console.log(e.info);
   }
-}
+};
 
 const uploadBrandLogo = (req, res) => {
   console.log(req.file);
@@ -66,4 +65,9 @@ const uploadBrandLogo = (req, res) => {
   });
 };
 
-module.exports = { isBrandStored, uploadBrandLogo, getAllManufacturerBrands, getAllBrands};
+module.exports = {
+  isBrandStored,
+  uploadBrandLogo,
+  getAllManufacturerBrands,
+  getAllBrands,
+};
