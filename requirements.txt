@@ -1,4 +1,7 @@
 numpy==1.25.2
 torch
+huggingface-hub
+sentence-transformers
 transformers
 flask
+gradio_client
