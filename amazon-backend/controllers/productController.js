@@ -9,10 +9,10 @@ const getProductDetails = async (req, res) => {
             success: true,
             product: product,
         });
-    }  catch (e) {
+    } catch (e) {
         if (e.code === 'CALL_EXCEPTION') {
             const reason = await decodeRevertReason(e.info.error.data);
-            res.status(500).json({ success: 'false', error: reason });
+            res.status(404).json({ success: 'false', error: reason });
         }
 
         console.log(e.info);
@@ -33,7 +33,7 @@ const getOwnerHistory = async (req, res) => {
     catch (e) {
         if (e.code === 'CALL_EXCEPTION') {
             const reason = await decodeRevertReason(e.info.error.data);
-            res.status(500).json({ success: 'false', error: reason });
+            res.status(404).json({ success: 'false', error: reason });
         }
 
         console.log(e.info);
@@ -54,7 +54,7 @@ const verifyProduct = async (req, res) => {
     } catch (e) {
         if (e.code === 'CALL_EXCEPTION') {
             const reason = await decodeRevertReason(e.info.error.data);
-            res.status(500).json({ success: 'false', error: reason });
+            res.status(404).json({ success: 'false', error: reason });
         }
 
         console.log(e.info);
@@ -63,4 +63,22 @@ const verifyProduct = async (req, res) => {
     }
 }
 
-module.exports = { getProductDetails, getOwnerHistory, verifyProduct }
+const getAllManufacturerProducts = async (req, res) => {
+    try {
+        const { address } = req.params;
+        const products = await contract.getAllManufacturerProducts(address);
+        return res.status(200).json({
+            success: true,
+            products: products,
+        });
+    } catch (e) {
+        if (e.code === 'CALL_EXCEPTION') {
+            const reason = await decodeRevertReason(e.info.error.data);
+            res.status(404).json({ success: 'false', error: reason });
+        }
+
+        console.log(e.info);
+    }
+}
+
+module.exports = { getProductDetails, getOwnerHistory, verifyProduct ,getAllManufacturerProducts}
