@@ -26,8 +26,8 @@ def predict_review():
 def predict_review():
     data = request.get_json()
     reviews = data['reviews']
-    fake, total = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
-    return jsonify({'fake': fake, 'total': total})
+    product_reviews_info = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
+    return jsonify(product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
 
 # @app.route('/predict-logo', methods=['POST'])
 # def predict_logo():
