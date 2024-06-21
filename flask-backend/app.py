@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 import sys
-import os
 
 # Add the paths to your modules
 sys.path.append('../fake_review_detection')
