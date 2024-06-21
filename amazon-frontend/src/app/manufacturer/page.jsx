@@ -145,7 +145,7 @@ export default function Component() {
                       <TableCell>{shortenAddress(brand[0])}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/manufacturer/productRegistration/${brand[0]}`}
+                          href={`/manufacturer/products/productRegistration/${brand[0]}`}
                           className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                           prefetch={false}
                         >

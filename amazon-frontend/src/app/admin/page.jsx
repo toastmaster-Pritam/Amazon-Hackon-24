@@ -4,22 +4,23 @@ import { Button } from "@/components/ui/button";
 import axios from "axios"; // Import axios for HTTP requests
 import { useWeb3 } from "@/context/Web3Context";
 import { shortenAddress } from "@/utils/shortenAddress";
+import toast from "react-hot-toast";
 
 export default function Component() {
   const [brands, setBrands] = useState([]);
   const { account, whitelistBrand, removeWhitelistedBrand } = useWeb3();
 
   useEffect(() => {
-    if (account) {
+    
       getAllBrands();
-    }
+    
   }, [account]);
 
   const getAllBrands = async () => {
-    if (!account) {
-      console.log("Account is not available");
-      return;
-    }
+    // if (!account) {
+    //   toast.error("Please connect your wallet to view brands!");
+    //   return;
+    // }
 
     try {
       const response = await axios.get(
@@ -37,6 +38,7 @@ export default function Component() {
 
       setBrands(fetchedBrands);
     } catch (error) {
+      toast.error("Error fetching brands!")
       console.error("Error fetching brands:", error);
     }
   };

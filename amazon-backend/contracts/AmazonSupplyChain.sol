@@ -33,6 +33,7 @@ contract AmazonSupplyChain {
         string details;
         bytes32 uniqueHash;
         bool delisted;
+        string productImage;
     }
 
     struct OwnerInfo {
@@ -60,6 +61,7 @@ contract AmazonSupplyChain {
     mapping(bytes32 => OwnershipRequest) private ownershipRequests; // map uniqueHash to ownership request
     mapping(address => Brand[]) private manufacturerBrands; // map manufacturer to their brand IDs
     mapping(address => Product[]) private manufacturerProducts;
+    mapping(bytes32=>string) productImageUrl;
 
     event UserRegistered(
         address indexed user,
@@ -253,7 +255,8 @@ contract AmazonSupplyChain {
     function registerProduct(
         string memory _name,
         string memory _details,
-        bytes32 _brandId
+        bytes32 _brandId,
+        string memory _image
     ) public onlyManufacturer returns (bytes32) {
         require(
             brands[_brandId].manufacturer == msg.sender,
@@ -276,8 +279,10 @@ contract AmazonSupplyChain {
             msg.sender,
             _details,
             uniqueHash,
-            false
+            false,
+            _image
         );
+        productImageUrl[productId]=_image; 
         manufacturerProducts[msg.sender].push(products[productId]);
         productHashes[uniqueHash] = productId;
         productOwners[productId].push(msg.sender);

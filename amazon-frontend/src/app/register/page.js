@@ -16,7 +16,7 @@ export default function Component() {
     phone: "",
   })
 
-  const { registerUser,address } = useWeb3()
+  const { registerUser,account } = useWeb3()
 
   const handleChange = (field, value) => {
     setData((prevData) => ({
@@ -27,7 +27,7 @@ export default function Component() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(!address){
+    if(!account){
       toast.error("Connect your wallet first!");
       setData({
         username: "",
@@ -40,7 +40,7 @@ export default function Component() {
     }
     // Perform form validation and handle form submission
     if (!data.username || !data.role || !data.email || !data.phone) {
-      alert("Please fill out all fields")
+      toast.error("Please fill in all fields")
       return
     }
     // Submit data to the server

@@ -30,6 +30,7 @@ export const registerUser = async (role, name, email, phoneNumber) => {
         await tx.wait();
 
         console.log("User registered successfully!");
+        toast.success("User registered successfully!");
         const receipt = await provider.getTransactionReceipt(tx.hash);
 
         const userRegisteredEvent = contract.interface.parseLog(
