@@ -11,7 +11,6 @@ from flask_cors import CORS
 
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 from model_factory.review_classifier import Review_Classifier
