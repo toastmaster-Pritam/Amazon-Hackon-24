@@ -1,0 +1,19 @@
+.meter-custom {
+    border: none;
+    background-color: #ffcccc;
+  }
+  
+  .meter-custom::-webkit-meter-bar {
+    background: none;
+    background-color: #ffcccc;
+  }
+  
+  .meter-custom::-webkit-meter-optimum-value {
+    background: none;
+    background-color: red;
+  }
+  
+  .meter-custom::-moz-meter-bar {
+    background: red;
+  }
+  

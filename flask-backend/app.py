@@ -6,15 +6,19 @@ import sys
 from gradio_client import Client, handle_file
 from werkzeug.utils import secure_filename
 import numpy as np
+from flask_cors import CORS
 
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(_file_), '..'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 from model_factory.review_classifier import Review_Classifier
 
 
-app = Flask(_name_)
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}, 
+     allow_headers=['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'X-CSRF-Token', 'X-My-Custom-Header', 'X-Another-Custom-Header'],
+     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'])
 client1 = Client("theArijitDas/Product-Update-Validator")
 client2= Client("piyushjain4/fake_logo_detection")
 
@@ -100,5 +104,5 @@ def validateProduct():
         return jsonify(result)
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
