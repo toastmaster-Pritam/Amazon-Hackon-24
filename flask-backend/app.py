@@ -8,13 +8,13 @@ from werkzeug.utils import secure_filename
 import numpy as np
 
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(_file_), '..'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 from model_factory.review_classifier import Review_Classifier
 
 
-app = Flask(_name_)
+app = Flask(__name__)
 client1 = Client("theArijitDas/Product-Update-Validator")
 client2= Client("piyushjain4/fake_logo_detection")
 
@@ -64,6 +64,13 @@ def rate_product():
                                          for key, value in product_reviews_info.items()}
     return jsonify(serializable_product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
 
+@app.route('/all-review-scores', methods=['POST'])
+def all_review_scores():
+    data = request.get_json()
+    reviews = data['reviews']
+    labels_and_scores = review_classifier.all_review_scores(reviews)
+    return jsonify(labels_and_scores)
+
 
 @app.route('/validate-product-update', methods=['POST'])
 def validateProduct():
@@ -100,5 +107,5 @@ def validateProduct():
         return jsonify(result)
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)

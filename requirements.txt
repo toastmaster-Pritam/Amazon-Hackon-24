@@ -3,4 +3,4 @@ torch
 transformers
 flask
 gradio_client
-flask_cors
+flask-cors
