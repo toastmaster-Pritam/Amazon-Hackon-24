@@ -7,7 +7,7 @@ const {
   ownerShipTransferEmail,
 } = require("../controllers/adminController");
 
-router.get("/getIPFSHash", getIPFSHash);
+router.get("/getIPFSHash/:brandName", getIPFSHash);
 router.post("/ownerShipTransferEmail", ownerShipTransferEmail);
 
 module.exports = router;

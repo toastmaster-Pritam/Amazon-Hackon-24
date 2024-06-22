@@ -4,7 +4,7 @@ const decodeRevertReason = require("../utils/errorDecoder");
 
 const isBrandStored = async (req, res) => {
   try {
-    const { brandName } = req.body;
+    const { brandName } = req.params;
     const stored = await contract.isBrandStored(brandName);
     return res.status(200).json({
       success: true,

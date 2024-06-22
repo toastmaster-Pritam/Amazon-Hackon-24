@@ -17,7 +17,7 @@ Overall project description
 #### Backend Setup
 1. **Navigate to the backend directory:**
    ```sh
-   cd /path/to/backend
+   cd /path/Amazon \hackon/amazon-backend/
    ```
 2. **Install the required dependencies:**
    ```sh
@@ -27,42 +27,521 @@ Overall project description
    ```sh
    npm run dev
    ```
+4. **Contract Deployment**
+```sh
+npx hardhat compile
+```
+```sh
+npx hardhat run scripts/deploy.js
+```   
 
-**`package.json` for Backend:**
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file in root of amazon-backend
+
+`RPC_URL`
+`PRIVATE_KEY`
+`CONTRACT_ADDRESS`
+`PORT`
+`CLOUDINARY_CLOUD_NAME`
+`CLOUDINARY_API_KEY`
+`CLOUDINARY_API_SECRET`
+`FRONTEND_URL`
+`SMPT_PASSWORD`
+`SMPT_SERVICE`
+`SMPT_MAIL`
+`SMPT_HOST`
+`SMPT_PORT`
+
+## API Reference
+
+#### Get brand image url
+#### Endpoint
+
+```http
+  GET /admin/getIPFSHash/${brandName}
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `brandName` | `string` | **Required**. brandName |
+
+#### Example Request
+
+```bash
+localhost:5000/api/admin/getIPFSHash/rolex
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
 ```json
 {
-  "name": "amazon-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon run index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.5"
-  },
-  "dependencies": {
-    "cloudinary": "^2.2.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "ethers": "^6.0.0",
-    "express": "^4.19.2",
-    "hardhat-ethers": "^1.0.1",
-    "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.14"
-  }
+    "success": true,
+    "url": "https://res.cloudinary.com/dbqz506c2/image/upload/v1718959255/ghl1u3ojfwqqlrwpnoyv.jpg"
 }
 ```
+
+#### Get status of brand being stored in blockchain
+#### Endpoint
+
+```http
+  GET /api/brand/isBrandStored/${brandname}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `brandName`      | `string` | **Required**. brandName to fetch |
+
+#### Example Request
+
+```bash
+localhost:5000/api/brand/isBrandStored/puma
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "stored": true
+}
+```
+
+#### verify authenticity of product
+#### Endpoint
+
+```http
+  GET /api/product/${hash}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `hash`      | `bytes32 string` | **Required**. uniqueHash to check authenticity |
+
+#### Example Request
+
+```bash
+localhost:5000/api/product/verifyProduct/0x5fa04869c34088327eb4b8a33a4de49e21c29be1d3dcd39fab1625ee992dbecf
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "verified": true
+}
+```
+
+#### Get Owner History
+#### Endpoint
+
+```http
+  GET /api/product/getOwnerHistory/${hash}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `hash`      | `bytes32 string` | **Required**. uniqueHash to fetch owner history |
+
+#### Example Request
+
+```bash
+localhost:5000/api/product/getOwnerHistory/0x5fa04869c34088327eb4b8a33a4de49e21c29be1d3dcd39fab1625ee992dbecf
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "history": [
+        "1,0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5"
+    ]
+}
+```
+
+#### Get Product Details
+#### Endpoint
+
+```http
+  GET /api/product/getProductDetails/${hash}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `hash`      | `bytes32 string` | **Required**. uniqueHash to fetch product details |
+
+#### Example Request
+
+```bash
+localhost:5000/api/product/getProductDetails/0x5fa04869c34088327eb4b8a33a4de49e21c29be1d3dcd39fab1625ee992dbecf
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "product": [
+        "0x765e00776744255a99c0b1c2a5402ae607895e14c0fa3ca9487a65adc16ea44e",
+        "puma shoe",
+        "0x17931a92e6880de7275006a30f08184529c173140e5341a7888f078e396b86b0",
+        "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+        "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+        "black color puma sports shoe",
+        "0x5fa04869c34088327eb4b8a33a4de49e21c29be1d3dcd39fab1625ee992dbecf",
+        false,
+        "https://res.cloudinary.com/dbqz506c2/image/upload/v1718982688/s7lgkhrn4symqhkmnv4k.webp"
+    ]
+}
+
+```
+
+
+#### Get all products by a particular Manufacturer
+#### Endpoint
+
+```http
+  GET /api/product/all/${address}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `address`      | `address string` | **Required**.wallet address of Manufacturer |
+
+#### Example Request
+
+```bash
+localhost:5000/api/product/all/0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "products": [
+        [
+            "0x9af6183f9c4589ed1f044fca72cf740173c8830368395d180c1d75a7746eb75a",
+            "rolex watch golden",
+            "0x72f23cb8415d99ed5b7e0ed4107988f10377cf934ac1d556331dba791c4d4007",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            "beautiful rolex watch in golden color and embrodery",
+            "0xf5a027e82844f9be96b857ba4639045d474beab5c857df5f9adcba5e365df278",
+            false,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1718959498/cmeoamcui6ybq9amzqro.webp"
+        ],
+        [
+            "0x765e00776744255a99c0b1c2a5402ae607895e14c0fa3ca9487a65adc16ea44e",
+            "puma shoe",
+            "0x17931a92e6880de7275006a30f08184529c173140e5341a7888f078e396b86b0",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            "black color puma sports shoe",
+            "0x5fa04869c34088327eb4b8a33a4de49e21c29be1d3dcd39fab1625ee992dbecf",
+            false,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1718982688/s7lgkhrn4symqhkmnv4k.webp"
+        ]
+    ]
+}
+```
+
+#### Get all brands registered by a Manufacturer
+#### Endpoint
+
+```http
+  GET /api/brand/all/${address}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `address`      | `address string` | **Required**.wallet address of Manufacturer |
+
+#### Example Request
+
+```bash
+localhost:5000/api/brand/all/0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "brands": [
+        [
+            "0x17931a92e6880de7275006a30f08184529c173140e5341a7888f078e396b86b0",
+            "puma",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            true,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1718959186/whcufgwdmjsow2idpjkn.jpg"
+        ],
+        [
+            "0x72f23cb8415d99ed5b7e0ed4107988f10377cf934ac1d556331dba791c4d4007",
+            "rolex",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            true,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1718959255/ghl1u3ojfwqqlrwpnoyv.jpg"
+        ]
+    ]
+}
+
+```
+
+#### Get all brands registered in blockchain
+#### Endpoint
+
+```http
+  GET /api/brand/all
+```
+
+
+#### Example Request
+
+```bash
+localhost:5000/api/brand/all
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "brands": [
+        [
+            "0x17931a92e6880de7275006a30f08184529c173140e5341a7888f078e396b86b0",
+            "puma",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            true,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1718959186/whcufgwdmjsow2idpjkn.jpg"
+        ],
+        [
+            "0x72f23cb8415d99ed5b7e0ed4107988f10377cf934ac1d556331dba791c4d4007",
+            "rolex",
+            "0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5",
+            true,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1718959255/ghl1u3ojfwqqlrwpnoyv.jpg"
+        ],
+        [
+            "0xb7db32e45c9bc09198b3f02cd16f65eaeeac9c90fa5f8b27f1b3092c96b754f3",
+            "adidas",
+            "0x4a946302A736AC270D97F4E47678CD10733DB3Ee",
+            true,
+            "https://res.cloudinary.com/dbqz506c2/image/upload/v1719000986/fnyky4faq7snyjvllgfu.png"
+        ]
+    ]
+}
+```
+
+
+#### Get user details of registered users
+#### Endpoint
+
+```http
+  GET /api/user/details//${address}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `address`      | `address string` | **Required**.wallet address of user |
+
+#### Example Request
+
+```bash
+localhost:5000/api/user/details/0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "user": [
+        "1",
+        "test",
+        "test@gmail.com",
+        "12345"
+    ]
+}
+```
+
+
+#### Check if User is Admin
+#### Endpoint
+
+```http
+  GET /api/user/details//${address}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `address`      | `address string` | **Required**.wallet address of user |
+
+#### Example Request
+
+```bash
+localhost:5000/api/user/isAdmin/0x1D43Ce30c2aE229A7eAc3479fE0a7882Afd4795F
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "admin": false
+}
+```
+
+#### upload image to cloudinary
+
+
+#### Endpoint
+
+```http
+POST /api/brand/uploadBrandLogo
+```
+
+#### Request
+
+- **URL**: `http://localhost:5000/api/brand/uploadBrandLogo`
+- **Method**: `POST`
+- **Body**: Multipart/form-data
+  - `brandLogo`: A file field that contains the brand logo to be uploaded.
+
+#### Example Request
+```bash
+curl -X POST http://localhost:5000/api/brand/uploadBrandLogo \
+  -F "brandLogo=@/path/to/your/brandLogo.png"
+```
+
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object with details of the upload status.
+
+#### Example Response
+
+```json
+{
+    "success": true,
+    "url": "https://res.cloudinary.com/dbqz506c2/image/upload/v1719026533/pf4gbg67xdboo5lqp8j4.png"
+}
+```
+
+### Send Ownership Transfer Email
+
+#### Endpoint
+
+```http
+POST /api/admin/ownerShipTransferEmail
+```
+
+#### Request
+
+- **URL**: `http://localhost:5000/api/admin/ownerShipTransferEmail`
+- **Method**: `POST`
+- **Body**: JSON
+  - `name` (string): Name of the recipient.
+  - `email` (string): Email address of the recipient.
+  - `uniqueHash` (string): Unique hash for the transfer.
+  - `requesterAddress` (string): Address of the requester.
+  - `requesterName` (string): Name of the requester.
+  - `productId` (string): ID of the product.
+  - `productName` (string): Name of the product.
+  - `brandId` (string): ID of the brand.
+  - `productImage` (string): URL of the product image.
+
+#### Example Request
+
+```bash
+curl -X POST http://localhost:5000/api/admin/ownerShipTransferEmail \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Rohan",
+    "email": "example@gmail.com",
+    "uniqueHash": "123456abcdef",
+    "requesterAddress": "0x12345abcde67890fghij1234567890klmnopqrstu",
+    "requesterName": "John Doe",
+    "productId": "9876543210",
+    "productName": "Acme Deluxe Widget",
+    "brandId": "acme123",
+    "productImage": "https://res.cloudinary.com/dbqz506c2/image/upload/v1718982688/s7lgkhrn4symqhkmnv4k.webp"
+  }'
+```
+
+#### Response
+
+- **Status Code**: `200 OK`
+- **Content**: JSON object with details of the email status.
+
+#### Example Response
+
+```json
+{
+  "success": true,
+  "message": "Ownership transfer email sent successfully"
+}
+```
+
+
 
 #### Frontend Setup
 1. **Navigate to the frontend directory:**
    ```sh
-   cd /path/to/frontend
+   cd /path/Amazon \hackon/amazon-frontend/
    ```
 2. **Install the required dependencies:**
    ```sh
@@ -73,53 +552,14 @@ Overall project description
    npm run dev
    ```
 
-**`package.json` for Frontend:**
-```json
-{
-  "name": "amazon-frontend",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@radix-ui/react-avatar": "^1.1.0",
-    "@radix-ui/react-label": "^2.0.2",
-    "@radix-ui/react-select": "^2.0.0",
-    "@radix-ui/react-separator": "^1.1.0",
-    "@radix-ui/react-slot": "^1.0.2",
-    "axios": "^1.7.2",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "ethers": "^5.7.1",
-    "html2canvas": "^1.4.1",
-    "html5-qrcode": "^2.3.8",
-    "lucide-react": "^0.395.0",
-    "next": "14.2.4",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-hot-toast": "^2.4.1",
-    "react-qr-code": "^2.0.15",
-    "resend": "^3.3.0",
-    "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1"
-  }
-}
-```
-
-### Metamask Installation
+### Metamask Installation and Testnet setup
 To interact with blockchain features, you will need to install Metamask, a browser extension for managing Ethereum-based applications.
 
 1. **Go to the [Metamask website](https://metamask.io/).**
 2. **Click "Download" and follow the instructions to add the extension to your browser.**
 3. **Create a new wallet or import an existing one using your seed phrase.**
+4. **Add Test network in your wallet (This project uses Volta Test RPC)**
+
 
 ### Website Demo Picture
 ![Website Demo](path/to/demo/picture.png)

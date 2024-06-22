@@ -4,7 +4,7 @@ const sendEmail = require("../utils/sendEmail");
 
 const getIPFSHash = async (req, res) => {
   try {
-    const { brandName } = req.body;
+    const { brandName } = req.params;
     const hash = await contract.getIPFSHash(brandName);
     return res.status(200).json({
       success: true,
