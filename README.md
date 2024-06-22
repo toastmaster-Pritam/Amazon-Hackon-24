@@ -2,7 +2,6 @@
 
 ## Contributors
 
-
 <table>
   <tr>
     <td align="center"><a href="https://github.com/toastmaster-Pritam"><img src="https://avatars.githubusercontent.com/u/102214990?v=4" width="50px;" alt="Pritam"/><br /><sub><b>Pritam</b></sub></a></td>
@@ -12,19 +11,89 @@
   </tr>
 </table>
 
-## Fake Review Detection & Product Update Validation
+## Table of Contents
 
+1. [Fake Review Detection & Product Update Validation](#1-fake-review-detection--product-update-validation)
+    - [A. Fake Review Detection](#a-fake-review-detection)
+    - [B. Product Update Validation](#b-product-update-validation)
+2. [Fake Logo Detection](#2-fake-logo-detection)
+- [Model Demo Notebooks](#model-demo-notebooks)
+- [Gradio Demos](#gradio-demos)
+3. [Supply Chain Transparency with Blockchain](#3-supply-chain-transparency-with-blockchain)
+4. [Setup for Backend and Frontend Services](#4-setup-for-backend-and-frontend-services)
+
+
+
+## 1. Fake Review Detection & Product Update Validation
 **Contributor:** [Arijit](https://github.com/theArijitDas)
 
-## Counterfeit Product Detection
+### A. Fake Review Detection
+#### Description
 
-### Fake Logo Detection
+This module leverages a fine-tuned version of [distilbert-base-uncased](https://huggingface.co/distilbert-base-uncased) to detect and classify fake reviews. The model is fine-tuned on the [Fake Reviews Dataset](https://huggingface.co/datasets/theArijitDas/Fake-Reviews-Dataset), which includes 20k fake reviews, 20k real product reviews and additional 94 AI generated data-points.
+
+- Label=**0**: Original reviews (presumably human-created and authentic)
+- Label=**1**: Computer-generated fake reviews
+
+### Usage
+The fine-tuned model is encapsulated in a `model_factory/review_classifier.py` that streamlines the detection and classification of fake reviews.
+
+### B. Product Update Validation
+
+#### Description
+This module addresses the issue of sellers updating product listings to inherit positive reviews from previous versions, which can mislead customers. It consists of two validators:
+
+- `model_factory/description_validator.py`: Checks the similarity between the product descriptions.
+- `model_factory/image_validator.py`: Checks the similarity between the product images.
+
+These validators are combined in `model_factory/product_update_validator.py` to provide a comprehensive validation check for product updates.
+
+#### Models
+For text similarity, the following models from Hugging Face are available:
+
+- [MPNet-base-v2](https://huggingface.co/models/MPNet-base-v2)
+- [DistilRoBERTa-v1](https://huggingface.co/models/DistilRoBERTa-v1)
+- [MiniLM-L12-v2](https://huggingface.co/models/MiniLM-L12-v2)
+- [MiniLM-L6-v2](https://huggingface.co/models/MiniLM-L6-v2)
+
+For image similarity, the following models are available:
+
+- [CLIP-ViT Base](https://huggingface.co/models/CLIP-ViT-Base)
+- [ViT Base](https://huggingface.co/models/ViT-Base)
+- [DINO ViT-S16](https://huggingface.co/models/DINO-ViT-S16)
+
+### Usage
+The combined validator can be used to check both text and image similarities for product updates, while the individual validators for description and image can be used seperately as well.
+
+
+## 2. Fake Logo Detection
 **Contributor:** [Piyush](https://github.com/piyushjain4)
 
-### Supply Chain Transparency with Blockchain
+> ### Model Demo Notebooks
+> A separate folder `model_demo_notebooks/` contains Jupyter notebooks demonstrating how to use each module. These notebooks provide step-by-step examples and usage scenarios to help you get started quickly.
+><br><br>
+
+> ### Gradio Demos
+>
+> Interactive demos for all models are available on Hugging Face Spaces, built using Gradio. These demos allow you to play around with the models and make API calls.
+> - [Fake Review Detection](https://huggingface.co/spaces/theArijitDas/Fake-Review-Detection)
+> - [Product Description Similarity](https://huggingface.co/spaces/theArijitDas/Product-Description-Similarity)
+> - [Product Image Similarity](https://huggingface.co/spaces/theArijitDas/Product-Image-Similarity)
+> - [Product Update Validator](https://huggingface.co/spaces/theArijitDas/Product-Update-Validator)
+> - [Fake Logo Detection](https://huggingface.co/spaces/piyushjain4/fake_logo_detection)
+> <br><br>
+
+> ### Installation
+>To install the required dependencies, run:
+>```bash
+>pip install -r requirements.txt
+>```
+> <br>
+
+## 3. Supply Chain Transparency with Blockchain
 **Contributor:** [Pritam](https://github.com/toastmaster-Pritam)
 
-### Setup for Backend and Frontend Services
+## 4. Setup for Backend and Frontend Services
 **Contributor:** [Saumya](https://github.com/Its-SSN) | [Pritam](https://github.com/toastmaster-Pritam)
 
 #### Backend Setup
