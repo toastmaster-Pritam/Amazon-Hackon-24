@@ -59,7 +59,7 @@ To run this project, you will need to add the following environment variables to
 #### Endpoint
 
 ```http
-  GET /admin/getIPFSHash/${brandName}
+GET /admin/getIPFSHash/${brandName}
 ```
 
 | Parameter | Type     | Description                |
@@ -90,7 +90,7 @@ localhost:5000/api/admin/getIPFSHash/rolex
 #### Endpoint
 
 ```http
-  GET /api/brand/isBrandStored/${brandname}
+GET /api/brand/isBrandStored/${brandname}
 ```
 
 | Parameter | Type     | Description                       |
@@ -121,7 +121,7 @@ localhost:5000/api/brand/isBrandStored/puma
 #### Endpoint
 
 ```http
-  GET /api/product/${hash}
+GET /api/product/${hash}
 ```
 
 | Parameter | Type     | Description                       |
@@ -152,7 +152,7 @@ localhost:5000/api/product/verifyProduct/0x5fa04869c34088327eb4b8a33a4de49e21c29
 #### Endpoint
 
 ```http
-  GET /api/product/getOwnerHistory/${hash}
+GET /api/product/getOwnerHistory/${hash}
 ```
 
 | Parameter | Type     | Description                       |
@@ -185,7 +185,7 @@ localhost:5000/api/product/getOwnerHistory/0x5fa04869c34088327eb4b8a33a4de49e21c
 #### Endpoint
 
 ```http
-  GET /api/product/getProductDetails/${hash}
+GET /api/product/getProductDetails/${hash}
 ```
 
 | Parameter | Type     | Description                       |
@@ -228,7 +228,7 @@ localhost:5000/api/product/getProductDetails/0x5fa04869c34088327eb4b8a33a4de49e2
 #### Endpoint
 
 ```http
-  GET /api/product/all/${address}
+GET /api/product/all/${address}
 ```
 
 | Parameter | Type     | Description                       |
@@ -282,7 +282,7 @@ localhost:5000/api/product/all/0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5
 #### Endpoint
 
 ```http
-  GET /api/brand/all/${address}
+GET /api/brand/all/${address}
 ```
 
 | Parameter | Type     | Description                       |
@@ -329,8 +329,9 @@ localhost:5000/api/brand/all/0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5
 #### Endpoint
 
 ```http
-  GET /api/brand/all
+GET /api/brand/all
 ```
+
 
 
 #### Example Request
