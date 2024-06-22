@@ -1,18 +1,31 @@
 # Overall Project Title
-Overall project description
+
+## Contributors
+
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/toastmaster-Pritam"><img src="https://avatars.githubusercontent.com/u/102214990?v=4" width="50px;" alt="Pritam"/><br /><sub><b>Pritam</b></sub></a></td>
+    <td align="center"><a href="https://github.com/theArijitDas"><img src="https://avatars.githubusercontent.com/u/116800444?v=4" width="50px;" alt="Arijit"/><br /><sub><b>Arijit</b></sub></a></td>
+    <td align="center"><a href="https://github.com/Its-SSN"><img src="https://avatars.githubusercontent.com/u/116066011?v=4" width="50px;" alt="Saumya"/><br /><sub><b>Saumya</b></sub></a></td>
+    <td align="center"><a href="https://github.com/piyushjain4"><img src="https://avatars.githubusercontent.com/u/102512290?v=4" width="50px;" alt="Piyush"/><br /><sub><b>Piyush</b></sub></a></td>
+  </tr>
+</table>
 
 ## Fake Review Detection & Product Update Validation
-**Contributor:** Arijit
+
+**Contributor:** [Arijit](https://github.com/theArijitDas)
 
 ## Counterfeit Product Detection
 
 ### Fake Logo Detection
-**Contributor:** Piyush
+**Contributor:** [Piyush](https://github.com/piyushjain4)
 
 ### Supply Chain Transparency with Blockchain
-**Contributor:** Pritam
+**Contributor:** [Pritam](https://github.com/toastmaster-Pritam)
 
 ### Setup for Backend and Frontend Services
+**Contributor:** [Saumya](https://github.com/Its-SSN) | [Pritam](https://github.com/toastmaster-Pritam)
 
 #### Backend Setup
 1. **Navigate to the backend directory:**
