@@ -5,3 +5,4 @@ transformers
 flask
 gradio_client
 tensorflow
+flask-cors
