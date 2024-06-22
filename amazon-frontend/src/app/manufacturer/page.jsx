@@ -64,7 +64,7 @@ export default function Component() {
               prefetch={false}
             >
               <Package2Icon className="h-6 w-6" />
-              <span className="">Acme Blockchain</span>
+              <span className="">Manufacturer</span>
             </Link>
           </div>
           <div className="flex-1 overflow-auto py-2">
@@ -85,14 +85,6 @@ export default function Component() {
                 <PlusIcon className="h-4 w-4" />
                 Register Brand
               </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-gray-200 focus:outline-none focus:ring focus:ring-primary"
-                prefetch={false}
-              >
-                <CheckIcon className="h-4 w-4" />
-                Approve Ownership
-              </Link>
             </nav>
           </div>
         </div>
@@ -105,7 +97,7 @@ export default function Component() {
             prefetch={false}
           >
             <Package2Icon className="h-6 w-6" />
-            <span className="">Acme Blockchain</span>
+            <span className="">Dashboard</span>
           </Link>
           <Button
             variant="ghost"

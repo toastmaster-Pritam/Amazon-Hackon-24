@@ -5,35 +5,34 @@ import { useWeb3 } from "@/context/Web3Context";
 import toast from "react-hot-toast";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { getProductDetails } from "@/services/getProductDetails";
-export default function Component({params}) {
+export default function Component({ params }) {
   const [productDetails, setProductDetails] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const {account, approveOwnership}=useWeb3();
+  const { account, approveOwnership } = useWeb3();
 
   const accept = async () => {
-   
     try {
       await approveOwnership(params.id);
-      const res=await getProductDetails(params.id);
+      const res = await getProductDetails(params.id);
       setProductDetails(res);
       setLoading(false);
-      
-      console.log(res)
+
+      console.log(res);
     } catch (error) {
       console.error(error);
     }
-    
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     accept();
-
-  },[account])
+  }, [account]);
   return (
     <>
       {loading ? (
-        <BeatLoader color="#36d7b7"/>
+        <div className="h-screen flex items-center justify-center">
+          <BeatLoader color="#36d7b7" />
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center h-[100dvh] gap-6">
           <CircleCheckIcon className="size-24 text-green-500" />
@@ -55,7 +54,9 @@ export default function Component({params}) {
               />
               <div className="text-left">
                 <h3 className="font-semibold">{productDetails.name}</h3>
-                <p className="text-sm text-muted-foreground">Product ID: ${shortenAddress(productDetails.id)}</p>
+                <p className="text-sm text-muted-foreground">
+                  Product ID: ${shortenAddress(productDetails.id)}
+                </p>
                 <p className="text-sm text-muted-foreground">
                   Current Owner: {shortenAddress(productDetails.currentOwner)}
                 </p>
