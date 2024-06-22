@@ -237,7 +237,15 @@ npx hardhat compile
 ```
 ```sh
 npx hardhat run scripts/deploy.js
-```   
+```
+5. **Run the Flask backend server:**
+```sh
+cd /path/Amazon \hackon/flask-backend/
+  ```   
+   ```sh
+   Linux/WSL: python3 app.py
+   CMD/Powershell: python app.py
+   ```   
 
 ## Environment Variables
 
