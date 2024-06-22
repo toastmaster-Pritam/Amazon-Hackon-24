@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useWeb3 } from "@/context/Web3Context";
 import { shortenAddress } from "@/utils/shortenAddress";
+import withRoleProtection from "@/components/middleware/protected";
 
 import {
   Table,
@@ -164,6 +165,8 @@ export default function Component() {
   );
 }
 
+
+
 function CheckIcon(props) {
   return (
     <svg
@@ -264,3 +267,4 @@ function PlusIcon(props) {
     </svg>
   );
 }
+

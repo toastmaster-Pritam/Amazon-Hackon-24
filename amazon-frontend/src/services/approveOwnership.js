@@ -34,6 +34,7 @@ export const approveOwnership = async (_uniqueHash) => {
       );
 
       console.log(approveOwnershipEvent);
+      toast.success("Ownership Transfer Successful");
     } catch (error) {
       console.error("Internal Server Error!",error);
     }

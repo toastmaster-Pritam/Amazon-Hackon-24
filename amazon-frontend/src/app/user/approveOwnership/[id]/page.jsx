@@ -1,22 +1,35 @@
 "use client";
 import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/lMnMvh2MzSV
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-export default function Component() {
+import { useWeb3 } from "@/context/Web3Context";
+import toast from "react-hot-toast";
+import { shortenAddress } from "@/utils/shortenAddress";
+import { getProductDetails } from "@/services/getProductDetails";
+export default function Component({params}) {
   const [productDetails, setProductDetails] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const approveOwnership = async () => {
-    let res; // = await ...api call
+  const {account, approveOwnership}=useWeb3();
+
+  const accept = async () => {
+   
+    try {
+      await approveOwnership(params.id);
+      const res=await getProductDetails(params.id);
+      setProductDetails(res);
+      setLoading(false);
+      
+      console.log(res)
+    } catch (error) {
+      console.error(error);
+    }
+    
   };
 
-  // useEffect(()=>{
+  useEffect(()=>{
+    accept();
 
-  // })
+  },[account])
   return (
     <>
       {loading ? (
@@ -34,17 +47,17 @@ export default function Component() {
             </p>
             <div className="flex items-center justify-center gap-4 mt-8">
               <img
-                src="/placeholder.svg"
+                src={productDetails.productImage}
                 alt="Product Image"
                 width={100}
                 height={100}
                 className="rounded-md"
               />
               <div className="text-left">
-                <h3 className="font-semibold">Premium Headphones</h3>
-                <p className="text-sm text-muted-foreground">Brand ID: 12345</p>
+                <h3 className="font-semibold">{productDetails.name}</h3>
+                <p className="text-sm text-muted-foreground">Product ID: ${shortenAddress(productDetails.id)}</p>
                 <p className="text-sm text-muted-foreground">
-                  Current Owner: John Doe
+                  Current Owner: {shortenAddress(productDetails.currentOwner)}
                 </p>
               </div>
             </div>
