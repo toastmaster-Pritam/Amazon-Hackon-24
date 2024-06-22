@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function Component() {
   const [products, setProducts] = useState([]);
@@ -35,21 +36,40 @@ export default function Component() {
     setIsEditModalOpen(true);
   };
 
-  const handleSubmitEdit = async(updatedProduct) => {
-    const oldProduct = { ...old };
-    setProducts((prevProducts) =>
-      prevProducts.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-    );
-    setEditingProduct(null);
-    setIsEditModalOpen(false);
-    let obj = {
-      text1: oldProduct.description,
-      text2: updatedProduct.description,
-      image1: oldProduct.imgFile,
-      image2: updatedProduct.imgFile
-    };
-    // const res = await axios.post("http://127.0.0.1:5000/validate-product-update", obj);
-    console.log(obj);
+  const handleSubmitEdit = async (updatedProduct) => {
+    try {
+      const oldProduct = { ...old };
+      const formData = new FormData();
+      formData.append("image1", oldProduct.imgFile);
+      formData.append("image2", updatedProduct.imgFile);
+      formData.append("text1", oldProduct.description);
+      formData.append("text2", updatedProduct.description);
+
+      const res = await axios.post(
+        "http://127.0.0.1:5000/validate-product-update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res);
+      if(res.data[1]=="Valid"){
+        setProducts((prevProducts) =>
+          prevProducts.map((p) =>
+            p.id === updatedProduct.id ? updatedProduct : p
+          )
+        );
+        setEditingProduct(null);
+        setIsEditModalOpen(false);
+        toast.success("Edited successfully")
+      }else if(res.data[1]=="Invalid"){
+        toast.error("Product info cannot be edited");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleAddProduct = () => {
@@ -78,7 +98,7 @@ export default function Component() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-black bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
+        <h1 className="text-2xl font-black bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 text-transparent bg-clip-text">
           Fake Product Update Detection
         </h1>
         <div>
