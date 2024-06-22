@@ -9,23 +9,39 @@ sys.path.append('..')
 from model_factory.review_classifier import Classifier
 
 
-
-
 app = Flask(__name__)
-client = Client("theArijitDas/Product-Update-Validator")
+client1 = Client("theArijitDas/Product-Update-Validator")
+client2= Client("piyushjain4/fake_logo_detection")
 
 # Initialize the classifiers
 review_classifier = Classifier(model_name='distilbert', return_bool=True)
-# logo_classifier = LogoModel()  # Initialize your logo model here
+ 
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
- #{'Total': total, 'Real': total-fake, 'Fake': fake}
-
-# @app.route('/predict-logo', methods=['POST'])
-# def predict_logo():
-#     data = request.get_json()
-#     logo_data = data['logo']
-#     prediction = logo_classifier.predict(logo_data)  # Assuming your logo model has a predict method
-#     return jsonify({'prediction': prediction})
+@app.route('/predict-logo', methods=['POST'])
+def predictLogo():
+    if request.method == 'POST':
+        # Get user inputs from the form
+        file = request.files['input_image']
+        
+        # Validate and save image1
+     
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+    
+        # Now you can pass the inputs to the Gradio client2 predict function
+        result = client2.predict(
+            input_image=handle_file(filepath),
+            api_name="/predict"
+        )
+        
+        # Return the result as JSON
+        return jsonify(result)
 
 @app.route('/predict-review', methods=['POST'])
 def predict_review():
@@ -35,21 +51,15 @@ def predict_review():
     return jsonify({'prediction': prediction})
 
 @app.route('/rate-product', methods=['POST'])
-def predict_review():
+def rate_product():
     data = request.get_json()
     reviews = data['reviews']
     product_reviews_info = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
     return jsonify(product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
 
 
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-
-
 @app.route('/validate', methods=['POST'])
-def upload_file():
+def validateProduct():
     if request.method == 'POST':
         # Get user inputs from the form
         text1 = request.form['text1']
@@ -69,8 +79,8 @@ def upload_file():
         filepath2 = os.path.join(app.config['UPLOAD_FOLDER'], filename2)
         file2.save(filepath2)
         
-        # Now you can pass the inputs to the Gradio client predict function
-        result = client.predict(
+        # Now you can pass the inputs to the Gradio client1 predict function
+        result = client1.predict(
             text1=text1,
             image1=handle_file(filepath1),
             text2=text2,
