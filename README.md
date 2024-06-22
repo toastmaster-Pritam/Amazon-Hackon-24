@@ -79,7 +79,7 @@ The Training dataset contains approximately 1.5k images for each brand ,with app
 The model is built using the Inception v3 architecture, which is a widely used convolutional neural network designed for image classification tasks. The model is pre-trained on ImageNet for better feature extraction and fine-tuned on the [fake and real logo dataset](https://huggingface.co/datasets/ravikagitha/ClothesBrandLogos) for Adidas, Puma, Allen Solly, and US Polo.
 
 ### Usage
-To facilitate easy classification of fake and real logos, the model is encapsulated in the `model_factory/fake_logo_detector.py` module.
+The model is encapsulated in the `model_factory/fake_logo_detector.py` module to facilitate easy classification of fake and real logos.
 
 > ### Model Demo Notebooks
 > A separate folder `model_demo_notebooks/` contains Jupyter notebooks demonstrating how to use each module. These notebooks provide step-by-step examples and usage scenarios to help you get started quickly.
