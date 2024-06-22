@@ -89,9 +89,113 @@ The combined validator can be used to check both text and image similarities for
 >pip install -r requirements.txt
 >```
 > <br>
-
 ## 3. Supply Chain Transparency with Blockchain
 **Contributor:** [Pritam](https://github.com/toastmaster-Pritam)
+
+### Overview
+In this project, we aimed to enhance supply chain transparency by leveraging blockchain technology. Our solution ensures the traceability and immutability of records, providing a robust mechanism to track products from their origin to the end consumer.
+
+### Key Functions Implemented in the Smart Contract
+
+1. ```solidity
+   function admin() external view returns (address)
+   ```
+   - Returns the address of the current admin.
+
+2. ```solidity
+   function approveOwnership(bytes32 _uniqueHash) external
+   ```
+   - Approves the ownership transfer of a product identified by its unique hash.
+
+3. ```solidity
+   function brandCounter() external view returns (uint256)
+   ```
+   - Returns the total number of registered brands.
+
+4. ```solidity
+   function getAllBrands() external view returns (tuple[])
+   ```
+   - Retrieves a list of all registered brands.
+
+5. ```solidity
+   function getAllManufacturerBrands(address _manufacturerAddress) external view returns (tuple[])
+   ```
+   - Retrieves all brands associated with a specific manufacturer.
+
+6. ```solidity
+   function getAllManufacturerProducts(address _manufacturerAddress) external view returns (tuple[])
+   ```
+   - Retrieves all products associated with a specific manufacturer.
+
+7. ```solidity
+   function getIPFSHash(string _brandName) external view returns (string)
+   ```
+   - Returns the IPFS hash of a brand's details by its name.
+
+8. ```solidity
+   function getProductDetails(bytes32 _uniqueHash) external view returns (tuple)
+   ```
+   - Retrieves detailed information about a product using its unique hash.
+
+9. ```solidity
+   function getProductOwners(bytes32 _uniqueHash) external view returns (tuple[])
+   ```
+   - Returns the ownership history of a product.
+
+10. ```solidity
+    function getUserDetails(address _userAddress) external view returns (tuple)
+    ```
+    - Retrieves detailed information about a user using their address.
+
+11. ```solidity
+    function isAdmin(address _address) external view returns (bool)
+    ```
+    - Checks if an address belongs to an admin.
+
+12. ```solidity
+    function isBrandStored(string _brandName) external view returns (bool)
+    ```
+    - Checks if a brand is already registered by its name.
+
+13. ```solidity
+    function productCounter() external view returns (uint256)
+    ```
+    - Returns the total number of registered products.
+
+14. ```solidity
+    function registerBrand(string _name, string _logoIpfsHash) external returns (bytes32)
+    ```
+    - Registers a new brand with a name and logo stored on IPFS.
+
+15. ```solidity
+    function registerProduct(string _name, string _details, bytes32 _brandId, string _image) external returns (bytes32)
+    ```
+    - Registers a new product under a specified brand.
+
+16. ```solidity
+    function registerUser(uint8 _role, string _name, string _email, string _phoneNumber) external
+    ```
+    - Registers a new user with specified role, name, email, and phone number.
+
+17. ```solidity
+    function removeWhitelistedBrand(bytes32 _brandId) external
+    ```
+    - Removes a brand from the whitelist.
+
+18. ```solidity
+    function requestOwnership(bytes32 _uniqueHash) external
+    ```
+    - Requests ownership transfer of a product using its unique hash.
+
+19. ```solidity
+    function verifyProduct(bytes32 _uniqueHash) external view returns (bool)
+    ```
+    - Verifies the authenticity of a product using its unique hash.
+
+20. ```solidity
+    function whitelistBrand(bytes32 _brandId) external
+    ```
+    - Adds a brand to the whitelist.
 
 ## 4. Setup for Backend and Frontend Services
 **Contributor:** [Saumya](https://github.com/Its-SSN) | [Pritam](https://github.com/toastmaster-Pritam)
