@@ -380,7 +380,7 @@ localhost:5000/api/brand/all
 #### Endpoint
 
 ```http
-  GET /api/user/details//${address}
+GET /api/user/details/${address}
 ```
 
 | Parameter | Type     | Description                       |
@@ -417,7 +417,7 @@ localhost:5000/api/user/details/0x8Ac802dB7276a9A6A56e5f1d54594829c6734Fb5
 #### Endpoint
 
 ```http
-POST /api/user/details/${address}
+GET /api/user/isAdmin/${address}
 ```
 
 | Parameter | Type     | Description                       |
