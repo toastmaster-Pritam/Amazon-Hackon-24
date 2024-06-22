@@ -5,6 +5,7 @@ from io import BytesIO
 import sys
 from gradio_client import Client, handle_file
 from werkzeug.utils import secure_filename
+import numpy as np
 
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -59,10 +60,12 @@ def rate_product():
     data = request.get_json()
     reviews = data['reviews']
     product_reviews_info = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
-    return jsonify(product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
+    serializable_product_reviews_info = {key: int(value) if isinstance(value, (np.integer, np.int32, np.int64)) else value 
+                                         for key, value in product_reviews_info.items()}
+    return jsonify(serializable_product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
 
 
-@app.route('/validate', methods=['POST'])
+@app.route('/validate-product-update', methods=['POST'])
 def validateProduct():
     if request.method == 'POST':
         # Get user inputs from the form
