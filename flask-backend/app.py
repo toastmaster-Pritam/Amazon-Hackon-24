@@ -2,27 +2,51 @@ import os
 from flask import Flask, request, redirect, url_for, render_template,jsonify
 import requests
 from io import BytesIO
-from flask_cors import CORS
 import sys
 from gradio_client import Client, handle_file
 from werkzeug.utils import secure_filename
 import numpy as np
 
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(_file_), '..'))
 sys.path.append(project_root)
 
 from model_factory.review_classifier import Review_Classifier
 
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(_name_)
 client1 = Client("theArijitDas/Product-Update-Validator")
 client2= Client("piyushjain4/fake_logo_detection")
 
 # Initialize the classifiers
-review_classifier = Classifier(model_name='distilbert', return_bool=True)
-# logo_classifier = LogoModel()  # Initialize your logo model here
+review_classifier = Review_Classifier(model_name='distilbert', return_bool=True)
+ 
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+@app.route('/predict-logo', methods=['POST'])
+def predictLogo():
+    if request.method == 'POST':
+        # Get user inputs from the form
+        file = request.files['input_image']
+        
+        # Validate and save image1
+     
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+    
+        # Now you can pass the inputs to the Gradio client2 predict function
+        result = client2.predict(
+            input_image=handle_file(filepath),
+            api_name="/predict"
+        )
+        
+        # Return the result as JSON
+        return jsonify(result)
 
 @app.route('/predict-review', methods=['POST'])
 def predict_review():
@@ -76,5 +100,5 @@ def validateProduct():
         return jsonify(result)
 
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True)
