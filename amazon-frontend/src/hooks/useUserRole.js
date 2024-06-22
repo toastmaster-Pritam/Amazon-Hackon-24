@@ -8,7 +8,7 @@ export const useUserRole = (userAddress) => {
     useEffect(() => {
       const fetchUserRole = async () => {
         try {
-          const res = await axios.get(`${NEXT_PUBLIC_}/api/user/details/${userAddress}`, {
+          const res = await axios.get(`${NEXT_PUBLIC_BACKEND_URL}/api/user/details/${userAddress}`, {
             withCredentials: true,
           });
           if (res.data.success) {
@@ -24,6 +24,6 @@ export const useUserRole = (userAddress) => {
       fetchUserRole();
     }, [userAddress]);
   
-    return { role, loading };
+    return { role, loading};
   };
   
