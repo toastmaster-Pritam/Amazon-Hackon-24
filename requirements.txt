@@ -1,7 +1,5 @@
 numpy==1.25.2
 torch
-sentence-transformers
 transformers
 flask
 gradio_client
-tensorflow

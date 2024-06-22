@@ -100,6 +100,12 @@ The model is encapsulated in the `model_factory/fake_logo_detector.py` module to
 >```bash
 >pip install -r requirements.txt
 >```
+>
+> For 'Product Update Validation' and 'Fake Logo Detection' we use the Gradio API hosted on Huggingface spaces.
+> To use these models locally, also install additional dependencies, run:
+> ```bash
+> pip install -r local_requirements.txt
+> ```
 > <br>
 ## 3. Supply Chain Transparency with Blockchain
 **Contributor:** [Pritam](https://github.com/toastmaster-Pritam)
