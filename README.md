@@ -11,6 +11,10 @@
   </tr>
 </table>
 
+### Website Demo Picture
+![Website Demo](./demo/Screenshot%202024-06-22%20112025.png)
+![Website Demo](./demo/Screenshot%202024-06-22%20111618.png)
+
 ## Table of Contents
 
 1. [Fake Review Detection & Product Update Validation](#1-fake-review-detection--product-update-validation)
@@ -292,7 +296,5 @@ To interact with blockchain features, you will need to install Metamask, a brows
 4. **Add Test network in your wallet (This project uses Volta Test RPC)**
 
 
-### Website Demo Picture
-![Website Demo](path/to/demo/picture.png)
 
-Feel free to replace the placeholder paths and image links with the actual ones used in your project.
+
