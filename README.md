@@ -51,16 +51,16 @@ These validators are combined in `model_factory/product_update_validator.py` to 
 #### Models
 For text similarity, the following models from Hugging Face are available:
 
-- [MPNet-base-v2](https://huggingface.co/models/MPNet-base-v2)
-- [DistilRoBERTa-v1](https://huggingface.co/models/DistilRoBERTa-v1)
-- [MiniLM-L12-v2](https://huggingface.co/models/MiniLM-L12-v2)
-- [MiniLM-L6-v2](https://huggingface.co/models/MiniLM-L6-v2)
+- [MPNet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
+- [DistilRoBERTa-v1](https://huggingface.co/sentence-transformers/all-distilroberta-v1)
+- [MiniLM-L12-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2)
+- [MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 
 For image similarity, the following models are available:
 
-- [CLIP-ViT Base](https://huggingface.co/models/CLIP-ViT-Base)
-- [ViT Base](https://huggingface.co/models/ViT-Base)
-- [DINO ViT-S16](https://huggingface.co/models/DINO-ViT-S16)
+- [CLIP-ViT Base](https://huggingface.co/openai/clip-vit-base-patch32)
+- [ViT Base](https://huggingface.co/google/vit-base-patch16-224)
+- [DINO ViT-S16](https://huggingface.co/facebook/dino-vits16)
 
 ### Usage
 The combined validator can be used to check both text and image similarities for product updates, while the individual validators for description and image can be used seperately as well.
