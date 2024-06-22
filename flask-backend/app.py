@@ -5,8 +5,12 @@ from io import BytesIO
 import sys
 from gradio_client import Client, handle_file
 from werkzeug.utils import secure_filename
-sys.path.append('..')
-from model_factory.review_classifier import Classifier
+
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
+from model_factory.review_classifier import Review_Classifier
 
 
 app = Flask(__name__)
@@ -14,7 +18,7 @@ client1 = Client("theArijitDas/Product-Update-Validator")
 client2= Client("piyushjain4/fake_logo_detection")
 
 # Initialize the classifiers
-review_classifier = Classifier(model_name='distilbert', return_bool=True)
+review_classifier = Review_Classifier(model_name='distilbert', return_bool=True)
  
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

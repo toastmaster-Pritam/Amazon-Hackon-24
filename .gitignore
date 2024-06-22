@@ -3,3 +3,4 @@ model_factory/__pycache__/
 model_demo_notebooks/images
 .venv/
 flask-backend/uploads/
+uploads/
