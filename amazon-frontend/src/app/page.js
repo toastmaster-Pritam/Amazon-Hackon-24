@@ -1,4 +1,4 @@
-"use client"
+"use client";
 /**
  * v0 by Vercel.
  * @see https://v0.dev/t/sRaGAaVSUeb
@@ -6,15 +6,12 @@
  */
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Coverpic from '../assets/Security-cuate.svg'
+import Coverpic from "../assets/Security-cuate.svg";
 import { useWeb3 } from "@/context/Web3Context";
 
-
-
 export default function Home() {
-
   const { account, connectWallet } = useWeb3();
-  
+
   return (
     <div className="min-h-[100dvh] flex flex-col">
       <header className="flex items-center justify-between h-16 px-4 md:px-6 bg-[#0077b6] text-white">
@@ -41,7 +38,13 @@ export default function Home() {
                 supply chain tracking, ensuring your customers receive only
                 genuine products. Enhance trust and protect your brand today.
               </p>
-              {account ? <div>{account}</div> : <Button className="inline-flex" onClick={() => connectWallet()}>Connect to Wallet</Button>}
+              {account ? (
+                <div>{account}</div>
+              ) : (
+                <Button className="inline-flex" onClick={() => connectWallet()}>
+                  Connect to Wallet
+                </Button>
+              )}
             </div>
             <div className="relative">
               <div className="absolute inset-0 bg-[url('/polygon-pattern.svg')] bg-repeat opacity-20" />
@@ -99,6 +102,30 @@ export default function Home() {
                 the authenticity of your products across the supply chain.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                AI Fake Review Detection
+              </h2>
+              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                Protecting your business from fraudulent reviews is crucial in
+                today's digital landscape. Our AI-powered fake review detection
+                tool helps you identify and remove misleading content, ensuring
+                your customers can trust the feedback they see.
+              </p>
+            </div>
+            <Link
+              href="#"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-gray-800 px-8 text-sm font-medium text-gray-100 shadow transition-colors hover:bg-gray-800/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              prefetch={false}
+            >
+              Check Prototype
+            </Link>
           </div>
         </div>
       </section>

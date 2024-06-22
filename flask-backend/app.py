@@ -8,13 +8,13 @@ from werkzeug.utils import secure_filename
 import numpy as np
 
 
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(_file_), '..'))
 sys.path.append(project_root)
 
 from model_factory.review_classifier import Review_Classifier
 
 
-app = Flask(__name__)
+app = Flask(_name_)
 client1 = Client("theArijitDas/Product-Update-Validator")
 client2= Client("piyushjain4/fake_logo_detection")
 
@@ -100,5 +100,5 @@ def validateProduct():
         return jsonify(result)
 
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True)
