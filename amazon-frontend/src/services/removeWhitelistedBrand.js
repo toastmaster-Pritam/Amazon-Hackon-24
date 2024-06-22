@@ -1,10 +1,15 @@
 import { getContract } from "@/utils/web3setup";
 import { parseRevertReason } from "@/utils/errorDecoder";
+import toast from "react-hot-toast";
 const {ethereum}=window;
 
 export const removeWhitelistedBrand = async (brandId) => {
     try {
-        if (!ethereum) return alert("Make sure you have metamask installed");
+        if (!ethereum){
+            toast.error("Make sure you have metamask installed");
+            return;
+    
+          } 
         const { contract,provider } = getContract();
         try {
             await contract.callStatic.removeWhitelistedBrand(
@@ -14,14 +19,14 @@ export const removeWhitelistedBrand = async (brandId) => {
             //console.log(staticCallError.error.data.data);
             const revertReason = parseRevertReason(staticCallError.error.data.data);
             console.error(`Revert reason: ${revertReason}`);
-            alert(revertReason);
+            toast.error(revertReason);
 
             return;
         }
         const tx = await contract.removeWhitelistedBrand(brandId);
         await tx.wait();
 
-        console.log("Brand removed from Whitelisted!");
+        toast.success("Brand removed from whitelist successfully!");
         const receipt = await provider.getTransactionReceipt(tx.hash);
 
         const removeWhitelistedBrandEvent = contract.interface.parseLog(

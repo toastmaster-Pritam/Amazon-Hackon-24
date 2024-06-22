@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { useWeb3 } from "@/context/Web3Context"
+import toast from "react-hot-toast"
 
 export default function Component() {
   const [data, setData] = useState({
@@ -15,7 +16,7 @@ export default function Component() {
     phone: "",
   })
 
-  const { registerUser } = useWeb3()
+  const { registerUser,account } = useWeb3()
 
   const handleChange = (field, value) => {
     setData((prevData) => ({
@@ -26,9 +27,21 @@ export default function Component() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(account)
+    if(!account){
+      toast.error("Connect your wallet first!");
+      setData({
+        username: "",
+        role: "",
+        email: "",
+        phone: "",
+      })
+    
+      return
+    }
     // Perform form validation and handle form submission
     if (!data.username || !data.role || !data.email || !data.phone) {
-      alert("Please fill out all fields")
+      toast.error("Please fill in all fields")
       return
     }
     // Submit data to the server

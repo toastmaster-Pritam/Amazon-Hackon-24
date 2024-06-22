@@ -4,7 +4,7 @@ require("@nomicfoundation/hardhat-toolbox");
 
 require('dotenv').config();
 
-const { API_URL, PRIVATE_KEY } = process.env; 
+const { RPC_URL, PRIVATE_KEY } = process.env; 
 module.exports = {
   solidity: "0.8.24",
   defaultNetwork: "volta",
@@ -13,7 +13,7 @@ module.exports = {
          chainId: 1337
       },
       volta: {
-         url: API_URL,
+         url: RPC_URL,
          accounts: [`0x${PRIVATE_KEY}`],
          gas: 210000000,
          gasPrice: 800000000000,

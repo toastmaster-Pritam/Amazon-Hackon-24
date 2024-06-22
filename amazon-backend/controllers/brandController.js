@@ -1,10 +1,10 @@
 const contract = require("../utils/web3setup");
 const cloudinary = require("../utils/cloudinary");
-const decodeRevertReason = require('../utils/errorDecoder');
+const decodeRevertReason = require("../utils/errorDecoder");
 
 const isBrandStored = async (req, res) => {
   try {
-    const { brandName } = req.body;
+    const { brandName } = req.params;
     const stored = await contract.isBrandStored(brandName);
     return res.status(200).json({
       success: true,
@@ -19,20 +19,36 @@ const isBrandStored = async (req, res) => {
 const getAllManufacturerBrands = async (req, res) => {
   try {
     const { address } = req.params;
-    const products = await contract.getAllManufacturerBrands(address);
+    const brands = await contract.getAllManufacturerBrands(address);
     return res.status(200).json({
       success: true,
-      products: products,
+      brands,
     });
   } catch (e) {
-    if (e.code === 'CALL_EXCEPTION') {
+    if (e.code === "CALL_EXCEPTION") {
       const reason = await decodeRevertReason(e.info.error.data);
-      res.status(404).json({ success: 'false', error: reason });
+      res.status(404).json({ success: "false", error: reason });
+    }
+    console.log("hi", e.info);
+  }
+};
+
+const getAllBrands = async (req, res) => {
+  try {
+    const brands = await contract.getAllBrands();
+    return res.status(200).json({
+      success: true,
+      brands,
+    });
+  } catch (e) {
+    if (e.code === "CALL_EXCEPTION") {
+      const reason = await decodeRevertReason(e.info.error.data);
+      res.status(404).json({ success: "false", error: reason });
     }
 
     console.log(e.info);
   }
-}
+};
 
 const uploadBrandLogo = (req, res) => {
   console.log(req.file);
@@ -48,4 +64,9 @@ const uploadBrandLogo = (req, res) => {
   });
 };
 
-module.exports = { isBrandStored, uploadBrandLogo, getAllManufacturerBrands };
+module.exports = {
+  isBrandStored,
+  uploadBrandLogo,
+  getAllManufacturerBrands,
+  getAllBrands,
+};

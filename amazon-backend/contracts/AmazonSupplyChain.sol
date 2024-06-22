@@ -33,6 +33,7 @@ contract AmazonSupplyChain {
         string details;
         bytes32 uniqueHash;
         bool delisted;
+        string productImage;
     }
 
     struct OwnerInfo {
@@ -48,6 +49,7 @@ contract AmazonSupplyChain {
     address public admin;
     uint256 public brandCounter;
     uint256 public productCounter;
+    Brand[] private allbrands;
 
     mapping(address => User) private users;
     mapping(bytes32 => Brand) private brands;
@@ -59,6 +61,7 @@ contract AmazonSupplyChain {
     mapping(bytes32 => OwnershipRequest) private ownershipRequests; // map uniqueHash to ownership request
     mapping(address => Brand[]) private manufacturerBrands; // map manufacturer to their brand IDs
     mapping(address => Product[]) private manufacturerProducts;
+    mapping(bytes32=>string) productImageUrl;
 
     event UserRegistered(
         address indexed user,
@@ -125,6 +128,10 @@ contract AmazonSupplyChain {
         admin = msg.sender;
     }
 
+    function isAdmin(address _address) public view returns (bool) {
+        return admin == _address;
+    }
+
     function registerUser(
         Role _role,
         string memory _name,
@@ -140,11 +147,10 @@ contract AmazonSupplyChain {
         emit UserRegistered(msg.sender, _role, _name, _email, _phoneNumber);
     }
 
-    function registerBrand(string memory _name, string memory _logoIpfsHash)
-        public
-        onlyManufacturer
-        returns (bytes32)
-    {
+    function registerBrand(
+        string memory _name,
+        string memory _logoIpfsHash
+    ) public onlyManufacturer returns (bytes32) {
         require(
             bytes(ipfsHash[_name]).length == 0,
             "Brand already registered!"
@@ -162,42 +168,58 @@ contract AmazonSupplyChain {
             _logoIpfsHash
         );
         manufacturerBrands[msg.sender].push(brands[brandId]);
+        allbrands.push(brands[brandId]);
         ipfsHash[_name] = _logoIpfsHash;
         emit BrandRegistered(brandId, _name, msg.sender, _logoIpfsHash);
         return brandId;
     }
 
-    function getAllManufacturerBrands(address _manufacturerAddress)
-        public
-        view
-        returns (Brand[] memory)
-    {
+    function getUserDetails(
+        address _userAddress
+    ) public view returns (User memory) {
+        require(
+            users[_userAddress].role != Role.None,
+            "No registered user found"
+        );
+        return users[_userAddress];
+    }
+
+    function getAllBrands() public view returns (Brand[] memory) {
+        return allbrands;
+    }
+
+    function getAllManufacturerBrands(
+        address _manufacturerAddress
+    ) public view returns (Brand[] memory) {
         return manufacturerBrands[_manufacturerAddress];
     }
 
-    function getIPFSHash(string memory _brandName)
-        public
-        view
-        onlyAdmin
-        returns (string memory)
-    {
+    function getIPFSHash(
+        string memory _brandName
+    ) public view onlyAdmin returns (string memory) {
         require(bytes(ipfsHash[_brandName]).length > 0, "File not found");
         return ipfsHash[_brandName];
     }
 
-    function isBrandStored(string memory _brandName)
-        public
-        view
-        returns (bool)
-    {
+    function isBrandStored(
+        string memory _brandName
+    ) public view returns (bool) {
         return bytes(ipfsHash[_brandName]).length > 0;
     }
 
     function whitelistBrand(bytes32 _brandId) public onlyAdmin {
         address _manufacturerAdress = brands[_brandId].manufacturer;
+        require(brands[_brandId].isWhitelisted==false,"Brand Already Whitelisted!");
         require(_manufacturerAdress != address(0), "Brand does not exist");
         brands[_brandId].isWhitelisted = true;
         Brand[] storage mybrands = manufacturerBrands[_manufacturerAdress];
+
+        for(uint256 i=0;i<allbrands.length;i++){
+            if(allbrands[i].id==_brandId){
+                allbrands[i].isWhitelisted=true;
+                break;
+            }
+        }
         for (uint256 i = 0; i < mybrands.length; i++) {
             if (mybrands[i].id == _brandId) {
                 mybrands[i].isWhitelisted = true;
@@ -214,6 +236,13 @@ contract AmazonSupplyChain {
         require(brands[_brandId].isWhitelisted, "Brand is not whitelisted");
         brands[_brandId].isWhitelisted = false;
         Brand[] storage mybrands = manufacturerBrands[_manufacturerAdress];
+
+        for(uint256 i=0;i<allbrands.length;i++){
+            if(allbrands[i].id==_brandId){
+                allbrands[i].isWhitelisted=false;
+                break;
+            }
+        }
         for (uint256 i = 0; i < mybrands.length; i++) {
             if (mybrands[i].id == _brandId) {
                 mybrands[i].isWhitelisted = false;
@@ -226,7 +255,8 @@ contract AmazonSupplyChain {
     function registerProduct(
         string memory _name,
         string memory _details,
-        bytes32 _brandId
+        bytes32 _brandId,
+        string memory _image
     ) public onlyManufacturer returns (bytes32) {
         require(
             brands[_brandId].manufacturer == msg.sender,
@@ -249,8 +279,10 @@ contract AmazonSupplyChain {
             msg.sender,
             _details,
             uniqueHash,
-            false
+            false,
+            _image
         );
+        productImageUrl[productId]=_image; 
         manufacturerProducts[msg.sender].push(products[productId]);
         productHashes[uniqueHash] = productId;
         productOwners[productId].push(msg.sender);
@@ -354,21 +386,17 @@ contract AmazonSupplyChain {
         return flag;
     }
 
-    function getProductDetails(bytes32 _uniqueHash)
-        public
-        view
-        returns (Product memory)
-    {
+    function getProductDetails(
+        bytes32 _uniqueHash
+    ) public view returns (Product memory) {
         bytes32 _productId = productHashes[_uniqueHash];
         require(_productId != 0, "Product Not found");
         return products[_productId];
     }
 
-    function getProductOwners(bytes32 _uniqueHash)
-        public
-        view
-        returns (OwnerInfo[] memory)
-    {
+    function getProductOwners(
+        bytes32 _uniqueHash
+    ) public view returns (OwnerInfo[] memory) {
         bytes32 _productId = productHashes[_uniqueHash];
         require(_productId != 0, "Product Not found");
         address[] memory owners = productOwners[_productId];
@@ -382,11 +410,9 @@ contract AmazonSupplyChain {
         return ownersWithRoles;
     }
 
-    function getAllManufacturerProducts(address _manufacturerAddress)
-        public
-        view
-        returns (Product[] memory)
-    {
+    function getAllManufacturerProducts(
+        address _manufacturerAddress
+    ) public view returns (Product[] memory) {
         Product[] memory myproducts = manufacturerProducts[
             _manufacturerAddress
         ];

@@ -1,11 +1,16 @@
 import { getContract } from "@/utils/web3setup";
 import { parseRevertReason } from "@/utils/errorDecoder";
+import toast from "react-hot-toast";
 const { ethereum } = window;
 import axios from "axios";
 
 export const registerBrand = async (brandName, brandLogoFile) => {
     try {
-      if (!ethereum) return alert("Make sure you have MetaMask installed");
+      if (!ethereum){
+        toast.error("Make sure you have metamask installed");
+        return;
+
+      } 
       console.log(brandLogoFile);
 
       const formData = new FormData();
@@ -35,7 +40,7 @@ export const registerBrand = async (brandName, brandLogoFile) => {
             staticCallError.error.data.data
           );
           console.error(`Revert reason: ${revertReason}`);
-          alert(revertReason);
+          toast.error(revertReason);
 
           return;
         }
@@ -55,6 +60,7 @@ export const registerBrand = async (brandName, brandLogoFile) => {
         console.log("Logo uploaded successfully!");
         console.log("BrandId: ", brandId.toString());
         console.log("Brand Name: ", brand_name);
+        toast.success(`${brand_name} brand registered successfully!`)
 
         console.log(brandRegisteredEvent);
       } else {

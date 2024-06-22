@@ -1,3 +1,6 @@
 amazon-hackathon-24-venv/
-fake_review_detection/__pycache__/
+model_factory/__pycache__/
+model_demo_notebooks/images
 .venv/
+flask-backend/uploads/
+uploads/

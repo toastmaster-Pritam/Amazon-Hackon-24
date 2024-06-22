@@ -1,3 +1,6 @@
 numpy==1.25.2
 torch
 transformers
+flask
+gradio_client
+flask-cors
