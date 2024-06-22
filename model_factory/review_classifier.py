@@ -43,14 +43,14 @@ class Review_Classifier:
         tokenizer = AutoTokenizer.from_pretrained(self.model_path[model_name])
         model = AutoModelForSequenceClassification.from_pretrained(self.model_path[model_name])
 
-        return pipeline("text-classification", model=model, tokenizer=tokenizer,
+        return pipeline("text-classification", model=model, tokenizer=tokenizer, top_k=None,
                         truncation=True, max_length=tokenizer.model_max_length,
                         device = 0 if cuda.is_available() else -1)
     
     def classify_with_model(self, text, return_bool=None):
         if return_bool is None: return_bool=self.return_bool
         
-        label = self.model(text)[0]['label']
+        label = self.model(text)[0][0]['label']
         if return_bool: return self.label2bool[label]
         return label
     
@@ -84,3 +84,7 @@ class Review_Classifier:
         fake, total = sum(pred), len(pred)
         if return_frac: return round(fake/total, 4)
         return {'Total': total, 'Real': total-fake, 'Fake': fake}
+    
+    def all_review_scores(self, reviews):
+        if isinstance(reviews, str): reviews=[reviews]
+        return self.model(reviews)
