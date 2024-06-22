@@ -2,3 +2,4 @@ amazon-hackathon-24-venv/
 model_factory/__pycache__/
 model_demo_notebooks/images
 .venv/
+flask-backend/uploads/

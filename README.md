@@ -552,6 +552,10 @@ curl -X POST http://localhost:5000/api/admin/ownerShipTransferEmail \
    ```sh
    npm run dev
    ```
+## Environment Variables
+To run this project, you will need to add the following environment variables to your .env file in root of amazon-frontend   
+`NEXT_PUBLIC_CONTRACT_ADDRESS`
+`NEXT_PUBLIC_BACKEND_URL`   
 
 ### Metamask Installation and Testnet setup
 To interact with blockchain features, you will need to install Metamask, a browser extension for managing Ethereum-based applications.
