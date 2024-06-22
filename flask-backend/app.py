@@ -13,7 +13,7 @@ from flask_cors import CORS
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
-# from model_factory.review_classifier import Review_Classifier
+
 
 
 app = Flask(__name__)
@@ -27,7 +27,7 @@ client1 = Client("theArijitDas/Product-Update-Validator")
 client2= Client("piyushjain4/fake_logo_detection")
 
 # Initialize the classifiers
-# review_classifier = Review_Classifier(model_name='distilbert', return_bool=True)
+review_classifier = Review_Classifier(model_name='distilbert', return_bool=True)
  
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -56,28 +56,28 @@ def predictLogo():
         # Return the result as JSON
         return jsonify(result)
 
-# @app.route('/predict-review', methods=['POST'])
-# def predict_review():
-#     data = request.get_json()
-#     review_text = data['review']
-#     prediction = review_classifier.hybrid_classify(review_text)  # Use hybrid_classify or other method as needed
-#     return jsonify({'prediction': prediction})
+@app.route('/predict-review', methods=['POST'])
+def predict_review():
+    data = request.get_json()
+    review_text = data['review']
+    prediction = review_classifier.hybrid_classify(review_text)  # Use hybrid_classify or other method as needed
+    return jsonify({'prediction': prediction})
 
-# @app.route('/rate-product', methods=['POST'])
-# def rate_product():
-#     data = request.get_json()
-#     reviews = data['reviews']
-#     product_reviews_info = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
-#     serializable_product_reviews_info = {key: int(value) if isinstance(value, (np.integer, np.int32, np.int64)) else value 
-#                                          for key, value in product_reviews_info.items()}
-#     return jsonify(serializable_product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
+@app.route('/rate-product', methods=['POST'])
+def rate_product():
+    data = request.get_json()
+    reviews = data['reviews']
+    product_reviews_info = review_classifier.rate_product(reviews, return_frac=False)  # Use hybrid_classify or other method as needed
+    serializable_product_reviews_info = {key: int(value) if isinstance(value, (np.integer, np.int32, np.int64)) else value 
+                                         for key, value in product_reviews_info.items()}
+    return jsonify(serializable_product_reviews_info) #{'Total': total, 'Real': total-fake, 'Fake': fake}
 
-# @app.route('/all-review-scores', methods=['POST'])
-# def all_review_scores():
-#     data = request.get_json()
-#     reviews = data['reviews']
-#     labels_and_scores = review_classifier.all_review_scores(reviews)
-#     return jsonify(labels_and_scores)
+@app.route('/all-review-scores', methods=['POST'])
+def all_review_scores():
+    data = request.get_json()
+    reviews = data['reviews']
+    labels_and_scores = review_classifier.all_review_scores(reviews)
+    return jsonify(labels_and_scores)
 
 
 @app.route('/validate-product-update', methods=['POST'])
