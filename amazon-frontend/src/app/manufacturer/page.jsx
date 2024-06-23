@@ -23,21 +23,19 @@ export default function Component() {
   const { account } = useWeb3();
 
   const getBrands = async () => {
-   
     if (!account) {
       console.log("Account is not available");
 
       return;
-    }
-    else{
-      console.log(account)
+    } else {
+      console.log(account);
     }
 
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/brand/all/${account}`
       );
-      //console.log("Response data:", response.data);
+      console.log("Response data:", response.data);
 
       setBrands(response.data.brands);
     } catch (error) {
@@ -85,6 +83,14 @@ export default function Component() {
                 <PlusIcon className="h-4 w-4" />
                 Register Brand
               </Link>
+              <Link
+                href="/"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-gray-200 focus:outline-none focus:ring focus:ring-primary"
+                prefetch={false}
+              >
+                
+                Back
+              </Link>
             </nav>
           </div>
         </div>
@@ -123,30 +129,33 @@ export default function Component() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {brands.length > 0 && brands.map((brand, index) => (
-                    <TableRow key={brand[0]}>
-                      <TableCell>
-                        <img
-                          src={brand[4] || "/placeholder.svg"}
-                          width="64"
-                          height="64"
-                          alt="Brand logo"
-                          className="aspect-square rounded-md object-contain"
-                        />
-                      </TableCell>
-                      <TableCell className="font-medium">{brand[1]}</TableCell>
-                      <TableCell>{shortenAddress(brand[0])}</TableCell>
-                      <TableCell>
-                        <Link
-                          href={`/manufacturer/products/productRegistration/${brand[0]}`}
-                          className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                          prefetch={false}
-                        >
-                          Register Product
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {brands.length > 0 &&
+                    brands.map((brand, index) => (
+                      <TableRow key={brand[0]}>
+                        <TableCell>
+                          <img
+                            src={brand[4] || "/placeholder.svg"}
+                            width="64"
+                            height="64"
+                            alt="Brand logo"
+                            className="aspect-square rounded-md object-contain"
+                          />
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {brand[1]}
+                        </TableCell>
+                        <TableCell>{shortenAddress(brand[0])}</TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/manufacturer/products/productRegistration/${brand[0]}`}
+                            className="inline-flex items-center rounded-md border border-transparent bg-gray-800 text-gray-50 px-2.5 py-1.5 text-xs font-semibold text-primary-foreground shadow transition-colors hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                            prefetch={false}
+                          >
+                            Register Product
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </div>
@@ -156,8 +165,6 @@ export default function Component() {
     </div>
   );
 }
-
-
 
 function CheckIcon(props) {
   return (
@@ -259,4 +266,3 @@ function PlusIcon(props) {
     </svg>
   );
 }
-

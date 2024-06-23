@@ -11,14 +11,16 @@ import { getProductOwners } from "@/services/getProductOwners";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { sendEmail } from "@/services/sendEmail";
 import toast from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 export default function Component() {
   const [isVerified, setIsVerified] = useState(null); // null means not checked, true or false for verified status
   const [qrvalue, setQrValue] = useState("");
   const [clicked, setClicked] = useState(false);
-  const { account,requestOwnership } = useWeb3();
+  const { account, requestOwnership } = useWeb3();
   const [productDetails, setProductDetails] = useState({});
   const [productOwners, setProductOwners] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleClick = () => {
     setClicked(true);
@@ -34,11 +36,10 @@ export default function Component() {
     async function success(data) {
       qrCodeScanner.clear();
       setQrValue(data);
-
+      setLoading(true);
       const response = await verifyProduct(data);
       const owners = await getProductOwners(data);
       const details = await getProductDetails(data);
-      
 
       setProductDetails(details);
 
@@ -52,6 +53,7 @@ export default function Component() {
         setIsVerified(false);
         toast.error("Product verification failed.");
       }
+      setLoading(false);
 
       setClicked(false);
     }
@@ -61,7 +63,7 @@ export default function Component() {
     }
   };
 
-  const requestOwnershipHandler = async() => {
+  const requestOwnershipHandler = async () => {
     requestOwnership(productDetails.uniqueHash);
     await sendEmail(
       productDetails.currentOwner,
@@ -74,118 +76,132 @@ export default function Component() {
     );
   };
 
-  
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4 md:px-6">
-      <div className="max-w-md w-full space-y-6">
-        <div className="flex flex-col items-center gap-4">
-          <div className="bg-muted rounded-lg p-6 w-full">
+    <>
+      {loading ? (
+        <div className="h-screen flex items-center justify-center">
+          <BeatLoader color="#000000" />
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4 md:px-6">
+          <div className="max-w-md w-full space-y-6">
             <div className="flex flex-col items-center gap-4">
-              <QrCodeIcon className="w-12 h-12 text-primary" />
-              <h2 className="text-2xl font-bold">
-                Verify Product Authenticity
-              </h2>
-              <p className="text-muted-foreground">
-                Scan the QR code on your product to verify its authenticity.
-              </p>
-              <Button size="lg" className="w-full" onClick={handleClick}>
-                Scan QR Code
-              </Button>
-              <div id="qr-reader"></div>
-            </div>
-          </div>
-          {isVerified === true && (
-            <div className="bg-muted rounded-lg p-6 w-full flex flex-col md:flex-row">
-              <div className="w-full md:w-1/3 flex items-center justify-center mb-4 md:mb-0">
-                <img
-                  src={productDetails.productImage}
-                  alt="Product"
-                  className="max-w-full h-auto"
-                />
-              </div>
-              <div className="w-full md:w-2/3 md:pl-4 flex flex-col gap-4">
-                <div className="flex items-center gap-2">
-                  <CircleCheckIcon className="w-8 h-8 text-green-500" />
-                  <h3 className="text-xl font-semibold">Product Verified</h3>
-                </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Product Name:</span>
-                    <span>{productDetails.name}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Product ID:</span>
-                    <span>{shortenAddress(productDetails.id)}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Current Owner:</span>
-                    <span>{shortenAddress(productDetails.currentOwner)}</span>
-                  </div>
+              <div className="bg-muted rounded-lg p-6 w-full">
+                <div className="flex flex-col items-center gap-4">
+                  <QrCodeIcon className="w-12 h-12 text-primary" />
+                  <h2 className="text-2xl font-bold">
+                    Verify Product Authenticity
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Scan the QR code on your product to verify its authenticity.
+                  </p>
+                  <Button size="lg" className="w-full" onClick={handleClick}>
+                    Scan QR Code
+                  </Button>
+                  <div id="qr-reader"></div>
                 </div>
               </div>
-            </div>
-          )}
-          {isVerified === true && (
-            <div className="bg-muted rounded-lg p-6 w-full">
-              <Separator />
-              <h4 className="text-lg font-semibold">Previous Owners</h4>
-              <div className="grid gap-4">
-                {productOwners.map((owner, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-4">
-                      <Avatar className="w-10 h-10 border">
-                        <AvatarImage src={owner.avatar} />
-                        <AvatarFallback>{owner.role.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="font-medium">{"Wallet Address"}</span>
-                        <span className="font-medium">{owner.name}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {shortenAddress(owner.address)}
+              {isVerified === true && (
+                <div className="bg-muted rounded-lg p-6 w-full flex flex-col md:flex-row">
+                  <div className="w-full md:w-1/3 flex items-center justify-center mb-4 md:mb-0">
+                    <img
+                      src={productDetails.productImage}
+                      alt="Product"
+                      className="max-w-full h-auto"
+                    />
+                  </div>
+                  <div className="w-full md:w-2/3 md:pl-4 flex flex-col gap-4">
+                    <div className="flex items-center gap-2">
+                      <CircleCheckIcon className="w-8 h-8 text-green-500" />
+                      <h3 className="text-xl font-semibold">
+                        Product Verified
+                      </h3>
+                    </div>
+                    <div className="grid gap-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Product Name:</span>
+                        <span>{productDetails.name}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Product ID:</span>
+                        <span>{shortenAddress(productDetails.id)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Current Owner:</span>
+                        <span>
+                          {shortenAddress(productDetails.currentOwner)}
                         </span>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-              <Button className="w-full" onClick={requestOwnershipHandler}>
-                Request Ownership
-              </Button>
-            </div>
-          )}
-          {isVerified === false && (
-            <div className="bg-muted rounded-lg p-6 w-full">
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <CircleXIcon className="w-8 h-8 text-red-500" />
-                  <h3 className="text-xl font-semibold">
-                    Product Not Verified
-                  </h3>
                 </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Product Name:</span>
-                    <span>{productDetails.name}</span>
+              )}
+              {isVerified === true && (
+                <div className="bg-muted rounded-lg p-6 w-full">
+                  <Separator />
+                  <h4 className="text-lg font-semibold">Previous Owners</h4>
+                  <div className="grid gap-4">
+                    {productOwners.map((owner, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-4">
+                          <Avatar className="w-10 h-10 border">
+                            <AvatarImage src={owner.avatar} />
+                            <AvatarFallback>
+                              {owner.role.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex flex-col">
+                            <span className="font-medium">
+                              {"Wallet Address"}
+                            </span>
+                            <span className="font-medium">{owner.name}</span>
+                            <span className="text-sm text-muted-foreground">
+                              {shortenAddress(owner.address)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Product ID:</span>
-                    <span>{shortenAddress(productDetails.id)}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Manufacturer:</span>
-                    <span>{productDetails.manufacturer}</span>
+                  <Button className="w-full" onClick={requestOwnershipHandler}>
+                    Request Ownership
+                  </Button>
+                </div>
+              )}
+              {isVerified === false && (
+                <div className="bg-muted rounded-lg p-6 w-full">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <CircleXIcon className="w-8 h-8 text-red-500" />
+                      <h3 className="text-xl font-semibold">
+                        Product Not Verified
+                      </h3>
+                    </div>
+                    <div className="grid gap-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Product Name:</span>
+                        <span>{productDetails.name}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Product ID:</span>
+                        <span>{shortenAddress(productDetails.id)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Manufacturer:</span>
+                        <span>{productDetails.manufacturer}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

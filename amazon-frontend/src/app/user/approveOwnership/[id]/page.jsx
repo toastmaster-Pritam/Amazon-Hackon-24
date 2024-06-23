@@ -39,7 +39,7 @@ export default function Component({ params }) {
     <>
       {loading ? (
         <div className="h-screen flex items-center justify-center">
-          <BeatLoader color="#36d7b7" />
+          <BeatLoader color="#000000" />
         </div>
       ) : ownershipVerified ? (
         <div className="flex flex-col items-center justify-center h-screen gap-6">
