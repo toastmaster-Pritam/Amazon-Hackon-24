@@ -64,7 +64,9 @@ export default function Component() {
   };
 
   const requestOwnershipHandler = async () => {
-    requestOwnership(productDetails.uniqueHash);
+    try {
+    const res=await requestOwnership(productDetails.uniqueHash);
+    console.log("res",res);
     await sendEmail(
       productDetails.currentOwner,
       productDetails.uniqueHash,
@@ -74,6 +76,13 @@ export default function Component() {
       productDetails.brandId,
       productDetails.productImage
     );
+      
+    } catch (error) {
+
+      console.error("Error requesting ownership:", error);
+      
+    }
+    
   };
 
   return (
