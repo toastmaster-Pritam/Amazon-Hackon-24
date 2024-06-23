@@ -29,7 +29,7 @@ const getAllManufacturerBrands = async (req, res) => {
       const reason = await decodeRevertReason(e.info.error.data);
       res.status(404).json({ success: "false", error: reason });
     }
-    console.log("hi", e.info);
+    console.log("hi", e);
   }
 };
 

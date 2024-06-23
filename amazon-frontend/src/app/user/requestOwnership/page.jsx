@@ -66,7 +66,7 @@ export default function Component() {
   const requestOwnershipHandler = async () => {
     try {
     const res=await requestOwnership(productDetails.uniqueHash);
-    console.log("res",res);
+    if(res!=undefined) return;
     await sendEmail(
       productDetails.currentOwner,
       productDetails.uniqueHash,

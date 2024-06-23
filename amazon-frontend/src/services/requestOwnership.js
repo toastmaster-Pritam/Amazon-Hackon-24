@@ -19,7 +19,7 @@ export const requestOwnership = async (_uniqueHash) => {
         console.error(`Revert reason: ${revertReason}`);
         toast.error(revertReason);
 
-        return;
+        return revertReason;
       }
 
       const tx = await contract.requestOwnership(_uniqueHash);
@@ -37,5 +37,6 @@ export const requestOwnership = async (_uniqueHash) => {
       console.log(requestOwnershipEvent);
     } catch (error) {
       console.error("Internal Server Error!",error);
+      return error;
     }
   };
