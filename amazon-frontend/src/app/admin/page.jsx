@@ -45,7 +45,8 @@ export default function Component() {
 
   const handleWhitelist = async (brandId) => {
     try {
-      await whitelistBrand(brandId); // Call the whitelistBrand function from useWeb3
+     const res= await whitelistBrand(brandId); // Call the whitelistBrand function from useWeb3
+     if(res!==undefined) return;
       console.log(`Brand with ID ${brandId} whitelisted successfully.`);
       
       setBrands((prevBrands) =>
@@ -60,7 +61,8 @@ export default function Component() {
 
   const handleRemove = async (brandId) => {
     try {
-      await removeWhitelistedBrand(brandId); // Call the removeWhitelistedBrand function from useWeb3
+      const res=await removeWhitelistedBrand(brandId); // Call the removeWhitelistedBrand function from useWeb3
+      if(res!==undefined) return;
       console.log(`Whitelisting removed for brand with ID ${brandId} successfully.`);
       
       setBrands((prevBrands) =>

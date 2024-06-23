@@ -21,7 +21,7 @@ export const removeWhitelistedBrand = async (brandId) => {
             console.error(`Revert reason: ${revertReason}`);
             toast.error(revertReason);
 
-            return;
+            return revertReason;
         }
         const tx = await contract.removeWhitelistedBrand(brandId);
         await tx.wait();
@@ -35,5 +35,6 @@ export const removeWhitelistedBrand = async (brandId) => {
         console.log(removeWhitelistedBrandEvent)
     } catch (error) {
         console.log(error);
+        return error;
     }
 };
