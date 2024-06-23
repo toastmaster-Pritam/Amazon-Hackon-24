@@ -56,7 +56,7 @@ export default function Component() {
         <div className="flex flex-col min-h-screen bg-gray-100">
           <div className="py-4 px-8">
             <Link href="/manufacturer">
-              <Button className="text-gray-700 bg-gray-100">
+              <Button className="text-gray-700 bg-gray-100  hover:bg-gray-100">
                 <svg
                   className="w-6 h-6 text-gray-800"
                   aria-hidden="true"

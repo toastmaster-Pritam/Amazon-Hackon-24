@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useWeb3 } from "@/context/Web3Context";
 import { shortenAddress } from "@/utils/shortenAddress";
-import withRoleProtection from "@/components/middleware/protected";
+import { AiFillProduct } from "react-icons/ai";
 
 import {
   Table,
@@ -82,6 +82,14 @@ export default function Component() {
               >
                 <PlusIcon className="h-4 w-4" />
                 Register Brand
+              </Link>
+              <Link
+                href="/manufacturer/products"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-gray-200 focus:outline-none focus:ring focus:ring-primary"
+                prefetch={false}
+              >
+               <AiFillProduct />
+                Products
               </Link>
               <Link
                 href="/"

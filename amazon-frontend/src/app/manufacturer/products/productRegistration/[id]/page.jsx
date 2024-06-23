@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { useWeb3 } from "@/context/Web3Context";
 import { shortenAddress } from "@/utils/shortenAddress";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function Component({ params }) {
   const {registerProduct,account}=useWeb3();
@@ -48,7 +49,29 @@ export default function Component({ params }) {
     registerProduct(data.name,data.image, data.description, data.brand);
   };
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center h-screen bg-gray-100 ">
+       <Link href="/manufacturer">
+              <Button className="text-gray-700 bg-gray-100  hover:bg-gray-100 absolute top-5 left-5">
+                <svg
+                  className="w-6 h-6 text-gray-800"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 12h14M5 12l4-4m-4 4 4 4"
+                  />
+                </svg>
+                Back
+              </Button>
+            </Link>
       <Card className="w-full max-w-xl shadow-md">
         <CardHeader>
           <CardTitle>Register New Product</CardTitle>
