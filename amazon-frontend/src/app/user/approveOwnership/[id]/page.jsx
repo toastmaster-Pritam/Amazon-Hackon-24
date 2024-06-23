@@ -1,13 +1,15 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 import { useWeb3 } from "@/context/Web3Context";
-import toast from "react-hot-toast";
 import { shortenAddress } from "@/utils/shortenAddress";
 import { getProductDetails } from "@/services/getProductDetails";
+
 export default function Component({ params }) {
   const [productDetails, setProductDetails] = useState({});
   const [loading, setLoading] = useState(true);
+  const [ownershipVerified, setOwnershipVerified] = useState(false);
 
   const { account, approveOwnership } = useWeb3();
 
@@ -15,34 +17,37 @@ export default function Component({ params }) {
     try {
       await approveOwnership(params.id);
       const res = await getProductDetails(params.id);
-      setProductDetails(res);
-      setLoading(false);
 
-      console.log(res);
+      if (res.currentOwner === account) {
+        setProductDetails(res);
+        setOwnershipVerified(true);
+      }
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    accept();
+    if (account) {
+      accept();
+    }
   }, [account]);
+
   return (
     <>
       {loading ? (
         <div className="h-screen flex items-center justify-center">
           <BeatLoader color="#36d7b7" />
         </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-[100dvh] gap-6">
-          <CircleCheckIcon className="size-24 text-green-500" />
+      ) : ownershipVerified ? (
+        <div className="flex flex-col items-center justify-center h-screen gap-6">
+          <CircleCheckIcon className="w-24 h-24 text-green-500" />
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-bold">
-              Ownership Transfer Successful
-            </h1>
-            <p className="text-muted-foreground">
-              Congratulations! You have successfully transferred ownership of
-              your account.
+            <h1 className="text-3xl font-bold">Ownership Transfer Successful</h1>
+            <p className="text-gray-600">
+              Congratulations! You have successfully transferred ownership of your account.
             </p>
             <div className="flex items-center justify-center gap-4 mt-8">
               <img
@@ -54,14 +59,29 @@ export default function Component({ params }) {
               />
               <div className="text-left">
                 <h3 className="font-semibold">{productDetails.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  Product ID: ${shortenAddress(productDetails.id)}
+                <p className="text-sm text-gray-500">
+                  Product ID: {shortenAddress(productDetails.id)}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-500">
                   Current Owner: {shortenAddress(productDetails.currentOwner)}
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      ) : (
+        <div className="h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-red-500">Error</h1>
+            <p className="text-gray-600">
+              Ownership transfer was not successful. Please try again.
+            </p>
+            <button
+          className="px-4 py-2 mt-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-300"
+          onClick={() => reset()}
+        >
+          Try Again
+        </button>
           </div>
         </div>
       )}
