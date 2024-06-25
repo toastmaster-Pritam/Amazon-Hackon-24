@@ -15,10 +15,10 @@ export default function Component({ params }) {
 
   const accept = async () => {
     try {
-      await approveOwnership(params.id);
+      const val=await approveOwnership(params.id);
       const res = await getProductDetails(params.id);
 
-      if (res.currentOwner === account) {
+      if (val ===undefined) {
         setProductDetails(res);
         setOwnershipVerified(true);
       }

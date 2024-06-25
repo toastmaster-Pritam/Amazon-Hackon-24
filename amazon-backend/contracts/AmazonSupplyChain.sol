@@ -348,9 +348,10 @@ contract AmazonSupplyChain {
 
         if (users[requester].role == Role.Consumer) {
             products[productId].delisted = true;
-            for (uint256 i = 0; i < productCounter; i++) {
+            for (uint256 i = 0; i < myproducts.length; i++) {
                 if (myproducts[i].id == productId) {
                     myproducts[i].delisted = true;
+                    myproducts[i].currentOwner=requester;
                     break;
                 }
             }

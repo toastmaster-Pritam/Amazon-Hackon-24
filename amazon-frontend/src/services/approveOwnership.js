@@ -20,7 +20,7 @@ export const approveOwnership = async (_uniqueHash) => {
         console.error(`Revert reason: ${revertReason}`);
         toast.error(revertReason);
 
-        return;
+        return revertReason;
       }
 
       const tx = await contract.approveOwnership(_uniqueHash);
@@ -37,6 +37,7 @@ export const approveOwnership = async (_uniqueHash) => {
       toast.success("Ownership Transfer Successful");
     } catch (error) {
       console.error("Internal Server Error!",error);
+      return error;
     }
   };
 
